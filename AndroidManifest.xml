@@ -22,6 +22,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.se.cronus.Side_Left_Fragment"
+            android:label="@string/title_activity_side__left__fragment" >
+        </activity>
     </application>
 
 </manifest>

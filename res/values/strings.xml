@@ -4,5 +4,6 @@
     <string name="app_name">Cronus</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_side__left__fragment">Side_Left_Fragment</string>
 
 </resources>

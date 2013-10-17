@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/temp_cronos_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.se.cronus.Side_Left_Fragment"
+            android:name="com.se.cronus.SideLeftFragment"
             android:label="@string/title_activity_side__left__fragment" >
         </activity>
     </application>

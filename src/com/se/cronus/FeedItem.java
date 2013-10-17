@@ -100,11 +100,17 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		tv.setMaxLines(3);
 		tv.setTextSize(CUtils.FONT_SIZE_SMALL);
 		
-		
 		// set fonts and colors
 		// TODO: get new fonts
 		if (type == CUtils.FACEBOOK_FEED)
 			tv.setBackgroundColor(CUtils.FACEBOOK_BLUE_CLEAR);
+		else if(type == CUtils.TWITTER_FEED)
+			tv.setBackgroundColor(CUtils.TWITTER_BLUE_CLEAR);
+		else if(type == CUtils.INSTA_FEED)
+			tv.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
+		else if(type == CUtils.PINTREST_FEED)
+			tv.setBackgroundColor(CUtils.PINTREST_RED_CLEAR);
+		
 		tv.setTextColor(Color.WHITE);
 		tv.bringToFront();
 		
@@ -113,6 +119,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		
 		this.setPadding(10, 7, 7, 10);
 		this.setOnClickListener(this);
+		
 	}
 
 	@Override
@@ -125,14 +132,40 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		case CUtils.FACEBOOK_FEED:
 			openFaceBook();
 		break;
-		
+		case CUtils.TWITTER_FEED:
+			openTwitter();
+		break;
+		case CUtils.INSTA_FEED:
+			openInsta();
+		break;
+		case CUtils.PINTREST_FEED:
+			openPintrest();
+		break;
 		}
 		
 	}
 
+	private void openTwitter() {
+		// TODO Auto-generated method stub
+		System.out.println("twitter click");
+
+	}
+
+	private void openInsta() {
+		// TODO Auto-generated method stub
+		System.out.println("intsagram click");
+
+	}
+
+	private void openPintrest() {
+		// TODO Auto-generated method stub
+		System.out.println("pintrest click");
+
+	}
+
 	private void openFaceBook() {
 		// TODO Auto-generated method stub
-		System.out.println("poooooooop");
+		System.out.println("facebook click");
 	}
 
 }

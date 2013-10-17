@@ -50,7 +50,17 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			headerLogo.setImageResource(R.drawable.facebook_logo_crop);
 			feeditemlist.setBackgroundColor(CUtils.FACEBOOK_BLUE);
 
+		} else if (f.type == CUtils.TWITTER_FEED) {
+			headerLogo.setImageResource(R.drawable.twitter_logo);
+			feeditemlist.setBackgroundColor(CUtils.TWITTER_BLUE);
+		} else if (f.type == CUtils.INSTA_FEED) {
+			headerLogo.setImageResource(R.drawable.instagram_logo);
+			feeditemlist.setBackgroundColor(CUtils.INSTA_BROWN);
+		} else if (f.type == CUtils.PINTREST_FEED) {
+			headerLogo.setImageResource(R.drawable.pinterest_logo);
+			feeditemlist.setBackgroundColor(CUtils.PINTREST_RED);
 		}
+
 		if (!f.isInit) {
 			updateItems(f.items);
 			f.isInit = true;

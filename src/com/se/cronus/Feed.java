@@ -12,27 +12,23 @@ public class Feed extends LinearLayout {
 	public int type;
 	public ArrayList<FeedItem> items;
 	public boolean isInit;
-	
+
 	public Feed(Context context, int type) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.type = type;
-		
+
 		isInit = false;
-		
-		
+
 		items = new ArrayList<FeedItem>();
-		items.add(new FeedItem(this.getContext(),
-				CUtils.FACEBOOK_FEED));
-		items.add(new FeedItem(this.getContext(),
-				CUtils.FACEBOOK_FEED));
-		items.add(new FeedItem(this.getContext(),
-				CUtils.FACEBOOK_FEED));
-		items.add(new FeedItem(this.getContext(),
-				CUtils.FACEBOOK_FEED));
-		
-		
-		
+		// for testing loop
+		for (int i = 0; i < 4; i++) {
+			items.add(new FeedItem(this.getContext(), type));
+			items.add(new FeedItem(this.getContext(), type));
+			items.add(new FeedItem(this.getContext(), type));
+			items.add(new FeedItem(this.getContext(), type));
+		}
+
 	}
 
 	public void add(FeedItem item) {

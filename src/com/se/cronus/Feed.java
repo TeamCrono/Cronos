@@ -10,20 +10,33 @@ import android.widget.LinearLayout;
 public class Feed extends LinearLayout {
 
 	public int type;
-	private ArrayList<FeedItem> feeditems;
-	public FeedItemAdapter itemAdapt;
+	public ArrayList<FeedItem> items;
+	public boolean isInit;
+	
 	public Feed(Context context, int type) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.type = type;
-		feeditems = new ArrayList<FeedItem>();
-		feeditems.add(new FeedItem(this.getContext(), CUtils.FACEBOOK_FEED));
-		itemAdapt = new FeedItemAdapter(this.getContext(),R.layout.feed_item,(FeedItem[]) feeditems.toArray());
+		
+		isInit = false;
+		
+		
+		items = new ArrayList<FeedItem>();
+		items.add(new FeedItem(this.getContext(),
+				CUtils.FACEBOOK_FEED));
+		items.add(new FeedItem(this.getContext(),
+				CUtils.FACEBOOK_FEED));
+		items.add(new FeedItem(this.getContext(),
+				CUtils.FACEBOOK_FEED));
+		items.add(new FeedItem(this.getContext(),
+				CUtils.FACEBOOK_FEED));
+		
+		
+		
 	}
 
 	public void add(FeedItem item) {
-		feeditems.add(item);
-		itemAdapt.add(item);
+		items.add(item);
 	}
 
 }

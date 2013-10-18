@@ -83,7 +83,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		bg.setLayoutParams(bgP);
 
 		if(bgpic == null)
-			bgpic = new ColorDrawable(CUtils.CRONUS_GREEN_LIGHT);
+			bgpic = this.getResources().getDrawable(R.drawable.deadpool_profile_pic_test);/*new ColorDrawable(CUtils.CRONUS_GREEN_LIGHT);*/
 		
 		
 		bg.setBackground(bgpic);

@@ -88,6 +88,7 @@ public class MainActivity extends FragmentActivity {
 		((View) FeedList.getParent()).setBackgroundColor(CUtils.CRONUS_BLUE_WHITE);
 		
 		this.getActionBar().setBackgroundDrawable(new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
+		this.getActionBar().setIcon(R.drawable.temp_cronos_logo);
 		//this.getActionBar().
 	
 		

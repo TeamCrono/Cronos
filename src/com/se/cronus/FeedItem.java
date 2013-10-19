@@ -1,9 +1,14 @@
 package com.se.cronus;
 
 import com.se.cronus.utils.CUtils;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapRegionDecoder;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
@@ -60,9 +65,9 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		this.type = type;
 		bg = new ImageView(context);
 		tv = new TextView(context);
-		
+
 		this.setClickable(true);
-		
+
 		setLayoutParams();
 
 	}
@@ -74,75 +79,83 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 				LayoutParams.WRAP_CONTENT);
 		setLayoutParams(thisP);
 
-		
 		this.addView(bg);
 		this.addView(tv);
-		
+
 		LayoutParams bgP = new LayoutParams(W, H);
 		bgP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		bg.setLayoutParams(bgP);
 
-		if(bgpic == null)
-			bgpic = this.getResources().getDrawable(R.drawable.deadpool_profile_pic_test);/*new ColorDrawable(CUtils.CRONUS_GREEN_LIGHT);*/
-		
-		
+		if (bgpic == null)
+			bgpic = this.getResources().getDrawable(
+					R.drawable.deadpool_profile_pic_test);/*
+														 * new ColorDrawable
+														 * (CUtils.
+														 * CRONUS_GREEN_LIGHT );
+														 */
+		Bitmap d = CUtils.drawableToBitmap(((Activity) this.getContext()),
+				bgpic, W, H);
+
+		bgpic = new BitmapDrawable(getResources(), d);
+
 		bg.setBackground(bgpic);
-		
-		
+		// never ever forget this line
+		// d.recycle(); TODO :put this line in were ever we remove items
+
 		LayoutParams tvP = new LayoutParams(W, LayoutParams.WRAP_CONTENT);
 		tvP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		tvP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		tv.setLayoutParams(tvP);
 
-		if(tvstr == null)
+		if (tvstr == null)
 			tvstr = "TEST STATUS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
 		tv.setText(tvstr);
 		tv.setMaxLines(3);
 		tv.setTextSize(CUtils.FONT_SIZE_SMALL);
-		
+
 		// set fonts and colors
 		// TODO: get new fonts
 		if (type == CUtils.FACEBOOK_FEED)
 			tv.setBackgroundColor(CUtils.FACEBOOK_BLUE_CLEAR);
-		else if(type == CUtils.TWITTER_FEED)
+		else if (type == CUtils.TWITTER_FEED)
 			tv.setBackgroundColor(CUtils.TWITTER_BLUE_CLEAR);
-		else if(type == CUtils.INSTA_FEED)
+		else if (type == CUtils.INSTA_FEED)
 			tv.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
-		else if(type == CUtils.PINTREST_FEED)
+		else if (type == CUtils.PINTREST_FEED)
 			tv.setBackgroundColor(CUtils.PINTREST_RED_CLEAR);
-		
-		tv.setTextColor(Color.WHITE);
+
+		if (type == CUtils.TWITTER_FEED)
+			tv.setTextColor(Color.BLACK);
+		else
+			tv.setTextColor(Color.WHITE);
 		tv.bringToFront();
-		
-		
-		
-		
+
 		this.setPadding(10, 7, 7, 10);
 		this.setOnClickListener(this);
-		
+
 	}
 
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		FeedItem vx = (FeedItem) v;
-		
-		switch (vx.type){
-		
+
+		switch (vx.type) {
+
 		case CUtils.FACEBOOK_FEED:
 			openFaceBook();
-		break;
+			break;
 		case CUtils.TWITTER_FEED:
 			openTwitter();
-		break;
+			break;
 		case CUtils.INSTA_FEED:
 			openInsta();
-		break;
+			break;
 		case CUtils.PINTREST_FEED:
 			openPintrest();
-		break;
+			break;
 		}
-		
+
 	}
 
 	private void openTwitter() {

@@ -22,13 +22,13 @@ import android.view.View;
 import android.widget.ImageButton;
 
 public class CUtils {
-	private static final int CLEAR = 100;
+	private static final int CLEAR = 150;
 	/* FEED ID */
 	public static final int FACEBOOK_FEED = 0;
 	public static final int PINTREST_FEED = 1;
 	public static final int INSTA_FEED = 2;
 	public static final int TWITTER_FEED = 3;
-
+	public static final int TEST_FEED = 4;
 	/* COLORS */
 	public static final int FACEBOOK_BLUE = Color.rgb(59, 89, 152);
 	public static final int FACEBOOK_BLUE_CLEAR = Color
@@ -51,6 +51,7 @@ public class CUtils {
 
 	/* FONTS AND LETTERING AND NUMBER STUFF */
 	public static final float FONT_SIZE_SMALL = 12;
+	
 
 	/*
 	 * static methods
@@ -162,19 +163,34 @@ public class CUtils {
 		return android.os.Build.VERSION.SDK_INT >= minV;
 	}
 
-	public static Bitmap drawableToBitmap(Activity activity, Drawable drawable) {
-		if (drawable instanceof BitmapDrawable) {
-			return ((BitmapDrawable) drawable).getBitmap();
-		}
-
+	public static Bitmap drawableToBitmap(Activity activity, Drawable drawable, int W, int H) {
+		
 		Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
 				drawable.getIntrinsicHeight(), Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
 		drawable.draw(canvas);
 
-		int y = (int) (getScreenHeight(activity));
-		bitmap = Bitmap.createScaledBitmap(bitmap, (int) (y * .6), y, false);
+		if(W==H){//is a square
+			int h = bitmap.getHeight();
+			int w = bitmap.getWidth();
+			int crop = 0;
+			Bitmap nbitmap;
+			if(h<w){// crop sides
+				crop = (int) (w-h)/2;
+				nbitmap = Bitmap.createBitmap(bitmap, crop, 0, w-crop, h);
+				nbitmap = Bitmap.createScaledBitmap(nbitmap, W, H, false);
+				return nbitmap;
+			}
+			if(h>w){//crop top and bottom
+				crop = (int) (w-h)/2;
+				nbitmap = Bitmap.createBitmap(bitmap, 0, crop, w, h-crop);
+				nbitmap = Bitmap.createScaledBitmap(nbitmap, W, H, false);
+				return nbitmap;
+			}
+		}
+		
+		bitmap = Bitmap.createScaledBitmap(bitmap, W, H, false);
 
 		return bitmap;
 	}

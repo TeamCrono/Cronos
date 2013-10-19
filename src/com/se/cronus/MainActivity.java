@@ -10,12 +10,34 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.Toast; 
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.se.cronus.utils.*;
+
+/************************************************************************
+Copyright 2012 Jeremy Feinstein
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+ **************************************************************************/
+
+
+
+
 public class MainActivity extends FragmentActivity {
 
 	LinearLayout parent;
@@ -25,48 +47,59 @@ public class MainActivity extends FragmentActivity {
 	Feed[] FeedArray;
 	//HListView newFeedList;
 	FragmentTransaction ft;
-
+	SlidingMenu profile;
+	SlidingMenu[] feedFragment;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		/*THIS SECTION DEALS WITH FRAGMENT HANDLING*/
+		/*THIS SECTION DEALS WITH FRAGMENT HANDLING*////however it doesnt work right now.
 		
-		
-//		// Check that the activity is using the layout version with
-//        // the fragment_container FrameLayout
-//        if (findViewById(R.id.fragment_container) != null) {
-//
-//            // However, if we're being restored from a previous state,
-//            // then we don't need to do anything and should return or else
-//            // we could end up with overlapping fragments.
-//            if (savedInstanceState != null) {
-//                return;
-//            }
-//		
-//		
-//            // Create a new Fragment to be placed in the activity layout
-//            SideLeftFragment firstFragment = new SideLeftFragment();
-//            
-//            // In case this activity was started with special instructions from an
-//            // Intent, pass the Intent's extras to the fragment as arguments
-//            firstFragment.setArguments(getIntent().getExtras());
-//            
-//            // Add the fragment to the 'fragment_container' FrameLayout
-//            //getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, (Fragment) firstFragment).commit();
-//            
-//            ft = getSupportFragmentManager().beginTransaction();
-//            ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
-//            
-//            ft.add(R.id.fragment_container, firstFragment).commit();
-//            
-//            
-//        }
-		
-		
-		
-		
+		// configure the SlidingMenu
+        profile = new SlidingMenu(this);
+        profile.setMode(SlidingMenu.LEFT);
+        profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+//        menu.setShadowWidthRes(R.dimen.shadow_width);
+//        menu.setShadowDrawable(R.drawable.shadow);
+//        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        profile.setFadeDegree(0.35f);
+        profile.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        profile.setMenu(R.layout.fragment_left);
+        profile.setBackgroundColor(CUtils.CRONUS_BLUE_WHITE);
+        profile.setBehindOffset(60);
+
+        
+		// configure the SlidingMenu
+        feedFragment = new SlidingMenu[5];
+        
+        
+        feedFragment[CUtils.TEST_FEED] = new SlidingMenu(this);
+        feedFragment[CUtils.TEST_FEED].setMode(SlidingMenu.RIGHT);
+        feedFragment[CUtils.TEST_FEED].setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+//        menu.setShadowWidthRes(R.dimen.shadow_width);
+//        menu.setShadowDrawable(R.drawable.shadow);
+//        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        feedFragment[CUtils.TEST_FEED].setFadeDegree(0.35f);
+        feedFragment[CUtils.TEST_FEED].attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        feedFragment[CUtils.TEST_FEED].setMenu(R.layout.fragment_right);
+        feedFragment[CUtils.TEST_FEED].setBackgroundColor(CUtils.CRONUS_BLUE_WHITE);
+        feedFragment[CUtils.TEST_FEED].setBehindOffset(40);
+        
+//        feedFragment[CUtils.FACEBOOK_FEED] = new SlidingMenu(this);
+//        feedFragment[CUtils.FACEBOOK_FEED].setMode(SlidingMenu.RIGHT);
+//        feedFragment[CUtils.FACEBOOK_FEED].setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+////        menu.setShadowWidthRes(R.dimen.shadow_width);
+////        menu.setShadowDrawable(R.drawable.shadow);
+////        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+//        feedFragment[CUtils.FACEBOOK_FEED].setFadeDegree(0.35f);
+//        feedFragment[CUtils.FACEBOOK_FEED].attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+//        feedFragment[CUtils.FACEBOOK_FEED].setMenu(R.layout.fragment_left);
+//        feedFragment[CUtils.FACEBOOK_FEED].setBackgroundColor(CUtils.CRONUS_BLUE_WHITE);
+//        feedFragment[CUtils.FACEBOOK_FEED].setBehindOffset(40);
+       
+        
+        
 		/*THIS SECTION DEALS WITH FEED ADAPTERS AND STUFFS*/
 		FeedArray  = new Feed[]{new Feed(this,CUtils.FACEBOOK_FEED),
 								new Feed(this,CUtils.INSTA_FEED),

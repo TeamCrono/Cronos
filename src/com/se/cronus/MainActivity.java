@@ -37,25 +37,42 @@ limitations under the License.
 
 
 
-
+/***
+ * 
+ * @author dj
+ *
+ */
 public class MainActivity extends FragmentActivity {
-
+	/*for fragments*/
+	private int cur;
+	private final int MAIN = 0;
+	private final int LEFT = 1;
+	private final int RIGHT = 2;
+	private int curLeftType;
+	
+	FragmentTransaction ft;
+	SlidingMenu profile;
+	SlidingMenu[] feedFragment;
+	
+	/*general stuff*/
 	LinearLayout parent;
 	boolean ifTrue;
 	ListView FeedList;
 	FeedAdapter feedAdapt;
 	Feed[] FeedArray;
 	//HListView newFeedList;
-	FragmentTransaction ft;
-	SlidingMenu profile;
-	SlidingMenu[] feedFragment;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		/*THIS SECTION DEALS WITH FRAGMENT HANDLING*////however it doesnt work right now.
 		
+		
+		
+		/*THIS SECTION DEALS WITH FRAGMENT HANDLING*////however it doesnt work right now.
+		cur = 0;
+		curLeftType = CUtils.TEST_FEED;
 		// configure the SlidingMenu
         profile = new SlidingMenu(this);
         profile.setMode(SlidingMenu.LEFT);
@@ -129,13 +146,36 @@ public class MainActivity extends FragmentActivity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    if(item.getItemId() == android.R.id.home) {
-	    	//app icon in action bar clicked; go back
-	        //do something
-	    	//Toast.makeText(this, "clicked" , 10000);
-	    	System.out.println("pewop");
-	        return true;
-	    }
+	   switch(item.getItemId()){
+	   case R.id.action_logo:
+		   if(cur == MAIN){
+				//go left
+			   profile.animate().start();
+			   profile.bringToFront();
+			   profile.isMenuShowing();// use this over cur == MAIN
+			   //profile.removeAllViews();// uset this one for the items
+			   
+			   cur = LEFT;
+			   
+			}else{
+				//go right
+				cur = MAIN;
+				profile.animate().start();
+			}
+		   break;
+	   case R.id.action_item:
+		   
+		if(cur == MAIN){
+			//go Right
+			cur = RIGHT;
+			item.setIcon(R.drawable.feed_item_icon_back);
+		}else{
+			//goleft
+			cur = MAIN;
+			item.setIcon(R.drawable.feed_item_icon);
+		}
+		   break;
+	   }
 
 	    return super.onOptionsItemSelected(item);
 	}
@@ -149,7 +189,12 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
+		getMenuInflater().inflate(R.layout.action_bar, menu);
+		this.getActionBar().setBackgroundDrawable(new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
+		int h =this.getActionBar().getHeight();
+		int w =this.getActionBar().getHeight();//make it a squar
+		
+		
 		return true;
 	}
 

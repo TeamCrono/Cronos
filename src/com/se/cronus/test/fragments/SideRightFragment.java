@@ -1,4 +1,4 @@
-package com.se.cronus;
+package com.se.cronus.test.fragments;
 
 import android.app.Fragment;
 

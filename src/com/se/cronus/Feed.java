@@ -2,11 +2,16 @@ package com.se.cronus;
 
 import java.util.ArrayList;
 
+import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
 
 import android.content.Context;
 import android.widget.LinearLayout;
-
+/***
+ * 
+ * @author dj
+ *
+ */
 public class Feed extends LinearLayout {
 
 	public int type;

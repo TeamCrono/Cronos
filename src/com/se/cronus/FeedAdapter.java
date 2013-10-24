@@ -2,6 +2,7 @@ package com.se.cronus;
 
 import java.util.ArrayList;
 
+import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
 
 import android.app.Activity;
@@ -17,7 +18,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-
+/***
+ * 
+ * @author dj
+ *
+ */
 public class FeedAdapter extends ArrayAdapter<Feed> {
 
 	ImageView headerLogo;

@@ -1,4 +1,7 @@
-package com.se.cronus;
+package com.se.cronus.test.fragments;
+
+import com.se.cronus.R;
+import com.se.cronus.R.layout;
 
 import android.os.Bundle;
 import android.app.Activity;

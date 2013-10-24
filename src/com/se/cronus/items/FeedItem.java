@@ -1,5 +1,7 @@
-package com.se.cronus;
+package com.se.cronus.items;
 
+import com.se.cronus.R;
+import com.se.cronus.R.drawable;
 import com.se.cronus.utils.CUtils;
 
 import android.annotation.SuppressLint;
@@ -17,7 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View;
 import android.view.View.OnClickListener;
-
+/***
+ * 
+ * @author dj
+ *
+ */
 public class FeedItem extends RelativeLayout implements OnClickListener {
 	public int type;
 	private ImageView bg;
@@ -26,6 +32,12 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 	private int W = 150;
 	private Drawable bgpic;
 	private String tvstr;
+	private int itemid;
+	private ItemDoc Doc;
+	
+	public ItemDoc getDoc(){
+		return Doc;
+	}
 
 	public ImageView getBg() {
 		return bg;
@@ -69,9 +81,25 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		this.setClickable(true);
 
 		setLayoutParams();
+		
+		Doc = null;
 
 	}
 
+	public FeedItem(Context con, int type, ItemDoc doc){
+		super(con);
+		
+		this.type = type;
+		bg = new ImageView(con);
+		tv = new TextView(con);
+
+		this.setClickable(true);
+
+		setLayoutParams();
+		
+		Doc = null;
+	}
+	
 	@SuppressLint("NewApi")
 	private void setLayoutParams() {
 		// set params
@@ -115,19 +143,22 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 
 		// set fonts and colors
 		// TODO: get new fonts
-		if (type == CUtils.FACEBOOK_FEED)
+		switch(type){
+		case CUtils.FACEBOOK_FEED:
 			tv.setBackgroundColor(CUtils.FACEBOOK_BLUE_CLEAR);
-		else if (type == CUtils.TWITTER_FEED)
+		break;
+		case CUtils.TWITTER_FEED:
 			tv.setBackgroundColor(CUtils.TWITTER_BLUE_CLEAR);
-		else if (type == CUtils.INSTA_FEED)
-			tv.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
-		else if (type == CUtils.PINTREST_FEED)
-			tv.setBackgroundColor(CUtils.PINTREST_RED_CLEAR);
-
-		if (type == CUtils.TWITTER_FEED)
 			tv.setTextColor(Color.BLACK);
-		else
-			tv.setTextColor(Color.WHITE);
+		break;
+		case CUtils.INSTA_FEED:
+			tv.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
+			break;
+		case CUtils.PINTREST_FEED:
+			tv.setBackgroundColor(CUtils.PINTREST_RED_CLEAR);
+		}
+
+		
 		tv.bringToFront();
 
 		this.setPadding(10, 7, 7, 10);
@@ -179,6 +210,14 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 	private void openFaceBook() {
 		// TODO Auto-generated method stub
 		System.out.println("facebook click");
+	}
+
+	public int getItemid() {
+		return itemid;
+	}
+
+	public void setItemid(int itemid) {
+		this.itemid = itemid;
 	}
 
 }

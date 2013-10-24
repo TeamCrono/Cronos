@@ -20,7 +20,11 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
-
+/***
+ * 
+ * @author dj
+ *
+ */
 public class CUtils {
 	private static final int CLEAR = 150;
 	/* FEED ID */

@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.se.cronus.SideLeftFragment"
+            android:name="com.se.cronus.test.fragments.SideLeftFragment"
             android:label="@string/title_activity_side__left__fragment" >
         </activity>
     </application>

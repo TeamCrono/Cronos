@@ -18,22 +18,31 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+
 /***
  * 
  * @author dj
- *
+ * 
  */
 public class FeedAdapter extends ArrayAdapter<Feed> {
 
-	ImageView headerLogo;
-	LinearLayout feeditemlist;
+	ImageView headerLogo[];
+	LinearLayout feeditemlist[];
 	Feed[] values;
 	Context mContext;
 
 	public FeedAdapter(Context context, Feed[] feeds, int r) {
 		super(context, r, feeds);
 		this.values = feeds;
+		headerLogo = new ImageView[feeds.length];
+		feeditemlist = new LinearLayout[feeds.length];
 		mContext = context;
+	}
+
+	public Feed getFeed(int index) {
+		if (index < values.length)
+			return values[index];
+		return null;
 	}
 
 	@Override
@@ -45,58 +54,80 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
 			convertView = inflater.inflate(R.layout.feed, null);
 		}
-		headerLogo = (ImageView) convertView.findViewById(R.id.header);
-		feeditemlist = (LinearLayout) convertView
+		headerLogo[position] = (ImageView) convertView.findViewById(R.id.header);
+		feeditemlist[position] = (LinearLayout) convertView
 				.findViewById(R.id.feeditemlist);
 
 		Feed f = values[position];
-		if (f.type == CUtils.FACEBOOK_FEED) {
+		switch (f.type) {
+		case CUtils.FACEBOOK_FEED:
 			// Set the image view to Facebook
-			headerLogo.setImageResource(R.drawable.facebook_logo_crop);
-			feeditemlist.setBackgroundColor(CUtils.FACEBOOK_BLUE);
-
-		} else if (f.type == CUtils.TWITTER_FEED) {
-			headerLogo.setImageResource(R.drawable.twitter_logo);
-			feeditemlist.setBackgroundColor(CUtils.TWITTER_BLUE);
-		} else if (f.type == CUtils.INSTA_FEED) {
-			headerLogo.setImageResource(R.drawable.instagram_logo);
-			feeditemlist.setBackgroundColor(CUtils.INSTA_BROWN);
-		} else if (f.type == CUtils.PINTREST_FEED) {
-			headerLogo.setImageResource(R.drawable.pinterest_logo);
-			feeditemlist.setBackgroundColor(CUtils.PINTREST_RED);
+			headerLogo[position].setImageResource(R.drawable.facebook_logo_crop);
+			feeditemlist[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
+			break;
+		case CUtils.TWITTER_FEED:
+			headerLogo[position].setImageResource(R.drawable.twitter_logo);
+			feeditemlist[position].setBackgroundColor(CUtils.TWITTER_BLUE);
+			break;
+		case CUtils.INSTA_FEED:
+			headerLogo[position].setImageResource(R.drawable.instagram_logo);
+			feeditemlist[position].setBackgroundColor(CUtils.INSTA_BROWN);
+			break;
+		case CUtils.PINTREST_FEED:
+			headerLogo[position].setImageResource(R.drawable.pinterest_logo);
+			feeditemlist[position].setBackgroundColor(CUtils.PINTREST_RED);
+			break;
 		}
 
-		if (!f.isInit) {
-			updateItems(f.items);
+		// checks on checks
+		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type) {
+			updateItems(f.items, f.type,position);
 			f.isInit = true;
 		}
 		return convertView;
 	}
-
-	private void updateItems(ArrayList<FeedItem> items) {
+	//This will eventually be fixed to be more object oriented stile and no so C code looking
+	private void updateItems(ArrayList<FeedItem> items, int type, int position) {
 		// TODO Auto-generated method stub
 		// lots of checks to avoid random acurences trust me all needed.
 		for (int i = 0; i < items.size(); i++) {
-			if (feeditemlist.findViewById(items.get(i).getId()) == null) {
-				feeditemlist.removeView(items.get(i));
+			if (feeditemlist[position].findViewById(items.get(i).getId()) == null) {
+				feeditemlist[position].removeView(items.get(i));
 				if (((ViewGroup) items.get(i).getParent()) != null
 						&& ((ViewGroup) items.get(i).getParent())
 								.findViewById(items.get(i).getId()) != null) {
 					((ViewGroup) items.get(i).getParent()).removeView(items
 							.get(i));
 				}
-				if (feeditemlist.getChildCount() < items.size())
-					feeditemlist.addView(items.get(i));
+				if (feeditemlist[position].getChildCount() < items.size()
+						&& type == items.get(i).type)
+					feeditemlist[position].addView(items.get(i));
 			}
 		}
 	}
 
-	public void updateItems(int feed) {
+	public void updateItems(int feedOrPosition, boolean isfeed) {
+		if(isfeed)
 		for (int i = 0; i < values.length; i++) {
-			if (values[i].type == feed) {
-				updateItems(values[i].items);
-				return;
+			if (values[i].type == feedOrPosition) {
+				updateItems(values[i].items, feedOrPosition, i);
 			}
 		}
+		else
+			updateItems(values[feedOrPosition].items, values[feedOrPosition].type, feedOrPosition);
+	}
+
+	public void resetItems() {
+		
+		if (values[0].isSearchMode())
+			for (int i = 0; i < values.length; i++) {
+				feeditemlist[i].removeAllViews();
+				updateItems(values[i].getSearch(), values[i].type, i);
+			}
+		else
+			for (int i = 0; i < values.length; i++) {
+				feeditemlist[i].removeAllViews();
+				updateItems(values[i].items, values[i].type, i);
+			}
 	}
 }

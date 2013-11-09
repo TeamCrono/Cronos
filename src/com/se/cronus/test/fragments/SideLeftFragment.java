@@ -12,7 +12,11 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-
+/***
+ * 
+ * @author dj
+ *
+ */
 public class SideLeftFragment extends Fragment {
 
 	@Override

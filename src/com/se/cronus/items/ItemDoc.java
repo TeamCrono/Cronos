@@ -24,6 +24,20 @@ public class ItemDoc {
 	private ArrayList<String> URL;
 	private int type;
 
+	
+	
+	@Override
+	public boolean equals(Object o) {
+		// TODO Auto-generated method stub
+		ItemDoc Io = (ItemDoc) o;
+		//if someone posts a statsus saying the same thing we be like, not in this house!
+		if(Io.Author.equals(Author) && Io.getStatus().equals(status) && Io.getType() == type){
+			return true;
+		}
+		return false;
+		
+	}
+
 	ItemDoc() {
 		// set defaults to null!!
 		img = null;

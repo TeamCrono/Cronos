@@ -1,6 +1,7 @@
 package com.se.cronus;
 
 import android.app.ActionBar;
+import android.app.Service;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,11 +12,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenListener;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.se.cronus.items.ItemFragmentView;
 import com.se.cronus.items.TestFragView;
@@ -52,7 +57,12 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private int CUR;
 	private SlidingMenu curAttatched;
 
+	// action bar stuff
+	private ActionBar act;
 	private ImageView item;
+	private ImageView search;
+	private EditText searchText;
+	private TextView searchTextV;
 
 	FragmentTransaction ft;
 	SlidingMenu profile;
@@ -64,12 +74,20 @@ public class MainActivity extends SlidingFragmentActivity implements
 	FeedAdapter feedAdapt;
 	Feed[] FeedArray;
 
+	
+	//Keyboard stuff
+	InputMethodManager imm;
+	
 	// HListView newFeedList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(com.se.cronus.R.layout.activity_main);
+		//general utilities for app
+		imm = (InputMethodManager)this.getSystemService(Service.INPUT_METHOD_SERVICE);
+		
+		
 
 		/* THIS SECTION DEALS WITH FRAGMENT HANDLING */// /however it doesnt
 														// work right now.
@@ -99,8 +117,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 		// set onclicks
 
-		ImageView ActionItem = (ImageView) findViewById(com.se.cronus.R.id.action_item);
-		ActionItem.setOnClickListener(this);
+		item.setOnClickListener(this);
+		search.setOnClickListener(this);
+		searchTextV.setClickable(true);
+		searchTextV.setOnClickListener(this);
 
 	}
 
@@ -152,9 +172,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 		FeedArray = new Feed[] { new Feed(this, CUtils.FACEBOOK_FEED),
 				new Feed(this, CUtils.INSTA_FEED),
 				new Feed(this, CUtils.PINTREST_FEED),
-				new Feed(this, CUtils.TWITTER_FEED),
-				new Feed(this, CUtils.PINTREST_FEED),
-				new Feed(this, CUtils.FACEBOOK_FEED) };
+				new Feed(this, CUtils.TWITTER_FEED) };
 	}
 
 	/**
@@ -175,6 +193,15 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.setBehindOffsetRes(com.se.cronus.R.dimen.slidingmenu_offset);
 
 		curAttatched.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+		curAttatched.setOnOpenListener(new OnOpenListener(){
+
+			@Override
+			public void onOpen() {
+				// TODO Auto-generated method stub
+				onOpenItem();
+			}
+			
+		});
 	}
 
 	public boolean changeItemFragment(ItemFragmentView newf) {
@@ -209,7 +236,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private void setUpActionBar() {
 		((View) FeedList.getParent())
 				.setBackgroundColor(CUtils.CRONUS_BLUE_WHITE);
-		ActionBar act = this.getActionBar();
+		act = this.getActionBar();
 		act.setBackgroundDrawable(new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
 		act.setIcon(com.se.cronus.R.drawable.temp_cronos_logo);
 		act.setCustomView(com.se.cronus.R.layout.action_bar);
@@ -217,8 +244,17 @@ public class MainActivity extends SlidingFragmentActivity implements
 		act.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
 				| ActionBar.DISPLAY_SHOW_HOME);
 
+		// extra icons
+		search = (ImageView) findViewById(com.se.cronus.R.id.action_search_b);
+		searchText = (EditText) findViewById(com.se.cronus.R.id.action_search_et);
+		searchTextV = (TextView) findViewById(com.se.cronus.R.id.action_search_tv);
 		item = (ImageView) findViewById(com.se.cronus.R.id.action_item);
-		// this.getActionBar().
+
+		searchText.setTextColor(CUtils.CRONUS_GREEN_LIGHT);
+		searchText.setTextSize(15);
+
+		searchTextV.setTextColor(CUtils.CRONUS_GREEN_LIGHT);
+		searchTextV.setTextSize(15);
 	}
 
 	@Override
@@ -245,10 +281,9 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		// getMenuInflater().inflate(R.layout.action_bar, menu);
-		this.getActionBar().setBackgroundDrawable(
-				new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
-		int h = this.getActionBar().getHeight();
-		int w = this.getActionBar().getHeight();// make it a squar
+		act.setBackgroundDrawable(new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
+		int h = act.getHeight();
+		int w = act.getHeight();// make it a squar
 
 		return true;
 	}
@@ -269,6 +304,13 @@ public class MainActivity extends SlidingFragmentActivity implements
 				viewMain();
 				return;
 			}
+			return;
+		case R.id.action_search_b:
+			onSearchClick();
+			return;
+		case R.id.action_search_tv:
+			onSearchClick();
+			return;
 		}
 
 	}
@@ -293,7 +335,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private void viewMain() {
 		// goleft
 		if (curAttatched.isMenuShowing()) {
-
+			//TODO: make this work
 			curAttatched.showContent(true);
 			item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon);
 			profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
@@ -304,17 +346,88 @@ public class MainActivity extends SlidingFragmentActivity implements
 		}
 		CUR = MAIN;
 	}
-	//this is the back end methods for search bar that is yet to be implemented!
+
+	// this is the back end methods for search bar that is yet to be
+	// implemented!
 	private void onSearch(String toFind) {
 		for (int i = 0; i < feedAdapt.getCount(); i++) {
 			feedAdapt.getFeed(i).onSearch(toFind);
 		}
 		feedAdapt.resetItems();
 	}
-	private void offSearch(){
+
+	private void offSearch() {
 		for (int i = 0; i < feedAdapt.getCount(); i++) {
 			feedAdapt.getFeed(i).offSearch();
 		}
 		feedAdapt.resetItems();
+	}
+
+	private void onSearchClick() {
+		// enable search
+		if (searchText.getVisibility() == View.GONE
+				&& searchTextV.getVisibility() == View.GONE) {
+			searchTextV.setText("");
+			searchText.setVisibility(View.VISIBLE);
+			searchText.setFocusableInTouchMode(true);
+			searchText.setFocusable(true);
+			searchText.requestFocus();
+			searchText.setSelected(true);
+			imm.showSoftInput(searchText, 0);
+			return;
+		}
+		// clear search
+		if (searchText.getVisibility() == View.GONE
+				&& searchTextV.getVisibility() == View.VISIBLE) {
+			searchTextV.setText("");
+			searchTextV.setVisibility(View.GONE);
+			searchText.setText("");
+			searchText.setVisibility(View.GONE);
+			offSearch();
+		}
+		// search
+		if (searchText.getVisibility() == View.VISIBLE
+				&& searchTextV.getVisibility() == View.GONE) {
+			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0); 
+			String toSearch = searchText.getText().toString().trim();
+			String title;
+			if (toSearch.length() > 1) {
+				int max = 32;
+				int min = 16;
+				if (toSearch.length() > max)
+					title = toSearch.substring(0, max);
+				else if (toSearch.length() < min) {
+					title = toSearch;
+					for (int i = toSearch.length(); i < min; i++)
+						title += " ";
+				} else {
+					title = toSearch;
+				}
+				searchTextV.setText(title);
+				searchTextV.setVisibility(View.VISIBLE);
+				searchText.setText("");
+				searchText.setVisibility(View.GONE);
+				// TODO: do search
+				onSearch(toSearch);
+				return;
+			}
+
+		}
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+	
+	private void onOpenItem(){
+		
 	}
 }

@@ -9,8 +9,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnDragListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
@@ -30,6 +32,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 	LinearLayout feeditemlist[];
 	Feed[] values;
 	Context mContext;
+	private int numValues;
 
 	public FeedAdapter(Context context, Feed[] feeds, int r) {
 		super(context, r, feeds);
@@ -37,6 +40,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		headerLogo = new ImageView[feeds.length];
 		feeditemlist = new LinearLayout[feeds.length];
 		mContext = context;
+		numValues = feeds.length;
 	}
 
 	public Feed getFeed(int index) {
@@ -55,6 +59,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			convertView = inflater.inflate(R.layout.feed, null);
 		}
 		headerLogo[position] = (ImageView) convertView.findViewById(R.id.header);
+		headerLogo[position].setOnDragListener(dragger);
 		feeditemlist[position] = (LinearLayout) convertView
 				.findViewById(R.id.feeditemlist);
 
@@ -121,7 +126,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		
 		if (values[0].isSearchMode())
 			for (int i = 0; i < values.length; i++) {
-				feeditemlist[i].removeAllViews();
+				feeditemlist[i].removeAllViews();//this is null, lets find out why!
 				updateItems(values[i].getSearch(), values[i].type, i);
 			}
 		else
@@ -130,4 +135,20 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 				updateItems(values[i].items, values[i].type, i);
 			}
 	}
+	
+	private OnDragListener dragger = new OnDragListener(){
+
+		@Override
+		public boolean onDrag(View v, DragEvent event) {
+			// TODO Auto-generated method stub
+			int i;
+			for(i = 0; i < numValues; i++){
+				if(v.getId() == headerLogo[i].getId()){
+					//TODO: dragged a header logo, do stuff!!!
+				}
+			}
+			return false;
+		}
+		
+	};
 }

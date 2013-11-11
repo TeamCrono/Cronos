@@ -51,7 +51,7 @@ import com.se.cronus.utils.CUtils;
  * @author dj
  * 
  */
-public class MainActivity extends /*Sliding*/FragmentActivity implements
+public class MainActivity extends /* Sliding */FragmentActivity implements
 		OnClickListener {
 	public static final boolean TESTING = true;
 	/* for fragments */
@@ -78,20 +78,18 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 	FeedAdapter feedAdapt;
 	Feed[] FeedArray;
 
-	
-	//Keyboard stuff
+	// Keyboard stuff
 	InputMethodManager imm;
-	
+
 	// HListView newFeedList;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(com.se.cronus.R.layout.activity_main);
-		//general utilities for app
-		imm = (InputMethodManager)this.getSystemService(Service.INPUT_METHOD_SERVICE);
-		
-		
+		// general utilities for app
+		imm = (InputMethodManager) this
+				.getSystemService(Service.INPUT_METHOD_SERVICE);
 
 		/* THIS SECTION DEALS WITH FRAGMENT HANDLING */// /however it doesnt
 														// work right now.
@@ -101,7 +99,7 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		setUpProfile();
 
 		// configure the SlidingMenu
-		setUpItemFragment();
+		setUpItemFragment(new TestFragView(CUtils.TEST_FEED, this));
 
 		/* THIS SECTION DEALS WITH FEED ADAPTERS AND STUFFS */
 
@@ -116,8 +114,8 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		setUpListAdapter();
 
 		/* THIS SECTION IS FOR INIT AND DESIGN STUFF */
-//		setBehindContentView(new SlidingMenu(this));
-//		this.getSlidingMenu().setLayoutParams(new LayoutParams(0, 0));
+		// setBehindContentView(new SlidingMenu(this));
+		// this.getSlidingMenu().setLayoutParams(new LayoutParams(0, 0));
 		setUpActionBar();
 
 		// set onclicks
@@ -183,7 +181,7 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 	/**
 	 * set up array that saves past right fragments
 	 */
-	private void setUpItemFragment() {
+	private void setUpItemFragment(ItemFragmentView v) {
 
 		curAttatched = new SlidingMenu(this);
 		curAttatched.setMode(SlidingMenu.RIGHT);
@@ -193,36 +191,40 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		curAttatched.setFadeDegree(0.35f);
 		// curAttatched.attachToActivity(this, //attatched with onclick
 		// SlidingMenu.SLIDING_CONTENT);
-		curAttatched.setMenu(new TestFragView(CUtils.TEST_FEED, this));
+		curAttatched.setMenu(v);
 		curAttatched
 				.setBehindOffsetRes(com.se.cronus.R.dimen.slidingmenu_offset);
 
 		curAttatched.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-		curAttatched.setOnOpenedListener(new OnOpenedListener(){
+		curAttatched.setOnOpenedListener(new OnOpenedListener() {
 
 			@Override
 			public void onOpened() {
 				// TODO Auto-generated method stub
 				onOpenItem();
 			}
-			
+
 		});
-		curAttatched.setOnClosedListener(new OnClosedListener(){
+		curAttatched.setOnClosedListener(new OnClosedListener() {
 
 			@Override
 			public void onClosed() {
 				// TODO Auto-generated method stub
 				onOpenMain();
 			}
-			
+
 		});
 	}
 
 	public boolean changeItemFragment(ItemFragmentView newf) {
 		// TODO: check for valid View first
 		((ItemFragmentView) curAttatched.getMenu()).destroy();
-		curAttatched.setMenu(newf);
-		viewCurItem();
+		setUpItemFragment(newf);
+//		curAttatched.setMenu(newf);
+		onClick(item);
+		item.performClick();
+		curAttatched.showContent();
+		curAttatched.showSecondaryMenu();
 		return true;
 	}
 
@@ -239,26 +241,26 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		// profile.setShadowDrawable(R.drawable.shadow);
 		profile.setBehindOffsetRes(com.se.cronus.R.dimen.slidingmenu_offset);
 		profile.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-//		profile.setBehindWidth(30);
+		// profile.setBehindWidth(30);
 		profile.setBehindScrollScale(0.25f);
 		profile.setFadeDegree(0.35f);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		profile.setBackgroundColor(Color.RED);// CUtils.CRONUS_BLUE_WHITE);
-		profile.setOnOpenedListener(new OnOpenedListener(){
+		profile.setOnOpenedListener(new OnOpenedListener() {
 
 			@Override
 			public void onOpened() {
 				onOpenProfile();
 			}
-			
+
 		});
-		profile.setOnClosedListener(new OnClosedListener(){
+		profile.setOnClosedListener(new OnClosedListener() {
 
 			@Override
 			public void onClosed() {
 				onOpenMain();
 			}
-			
+
 		});
 	}
 
@@ -290,18 +292,18 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			switch(CUR){
+			switch (CUR) {
 			case RIGHT:
 				viewMain();
-			return true;
+				return true;
 			case MAIN:
 				viewProfile();
-			return true;
+				return true;
 			case LEFT:
 				viewMain();
-			return true;
+				return true;
 			}
-			
+
 		}
 
 		return super.onOptionsItemSelected(item);
@@ -349,7 +351,6 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		}
 
 	}
-	
 
 	// this is the back end methods for search bar that is yet to be
 	// implemented!
@@ -392,7 +393,7 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		// search
 		if (searchText.getVisibility() == View.VISIBLE
 				&& searchTextV.getVisibility() == View.GONE) {
-			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0); 
+			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
 			String toSearch = searchText.getText().toString().trim();
 			String title;
 			if (toSearch.length() > 1) {
@@ -420,8 +421,7 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		}
 	}
 
-	
-	//this section is to help with save state
+	// this section is to help with save state
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
@@ -433,57 +433,63 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 	}
-	
-	
-	
-	//This is going to handle activating buttons and all that
-	//disable profile
-	private void onOpenItem(){
+
+	// This is going to handle activating buttons and all that
+	// disable profile
+	private void onOpenItem() {
 		System.out.println("onOpenItem");
 		item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon_back);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 
-		//((ViewGroup)profile.getParent()).removeView(profile);
-//		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-//		profile.setSlidingEnabled(true);
-//		// this.setBehindContentView(profile);
-//		profile.setVisibility(View.VISIBLE);
-//		System.out.println("Profile enabled");
+		// ((ViewGroup)profile.getParent()).removeView(profile);
+		// profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		// profile.setSlidingEnabled(true);
+		// // this.setBehindContentView(profile);
+		// profile.setVisibility(View.VISIBLE);
+		// System.out.println("Profile enabled");
 		CUR = RIGHT;
 	}
-	//disable curitem
-	private void onOpenProfile(){
+
+	// disable curitem
+	private void onOpenProfile() {
 		System.out.println("onOpenProfile");
 		curAttatched.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
 
 		CUR = LEFT;
 	}
-	//enable both drares
-	private void onOpenMain(){
+
+	// enable both drares
+	private void onOpenMain() {
 		System.out.println("onOpenMain");
 		item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		curAttatched.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 
-//		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-//		profile.setSlidingEnabled(false);
-//		// this.setBehindContentView(null);
-//		profile.setVisibility(View.GONE);
-//		System.out.println("Profile disabled");
+		// profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		// profile.setSlidingEnabled(false);
+		// // this.setBehindContentView(null);
+		// profile.setVisibility(View.GONE);
+		// System.out.println("Profile disabled");
 		CUR = MAIN;
 	}
-	
-	public void viewProfile(){
+
+	public void viewProfile() {
 		profile.showMenu(true);
-		//((ViewGroup)profile.getParent()).removeView(profile);
-		
+		// ((ViewGroup)profile.getParent()).removeView(profile);
+
 	}
+
 	public void viewCurItem() {
 
 		// go Right
-		curAttatched.showSecondaryMenu(true);
+		for (int i = 0; i < 3; i++)
+			curAttatched.showMenu(true);
+		if (!curAttatched.isMenuShowing()) {
+			System.out.println("Item didn't show, trying again");
+		}
 
 	}
+
 	private void viewMain() {
 		// goleft
 		if (curAttatched.isMenuShowing()) {
@@ -492,6 +498,6 @@ public class MainActivity extends /*Sliding*/FragmentActivity implements
 		if (profile.isMenuShowing()) {
 			profile.showContent(true);
 		}
-		
+
 	}
 }

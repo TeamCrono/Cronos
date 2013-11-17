@@ -1,9 +1,11 @@
-package com.se.cronus;
+package com.se.cronus.Feeds;
 
 import java.util.ArrayList;
 
+import com.se.cronus.MainActivity;
 import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
+import com.se.cronus.utils.CronusApp;
 
 import android.content.Context;
 import android.widget.LinearLayout;
@@ -34,17 +36,17 @@ public class Feed extends LinearLayout {
 		items = new ArrayList<FeedItem>();
 		rItems = new ArrayList<FeedItem>();
 		sItems = new ArrayList<FeedItem>();
-		
+		Integer feedids = ((CronusApp)((MainActivity)this.getContext()).getApplication()).feedIDgen;
 		if (MainActivity.TESTING) {
 			// for testing loop
 			for (int i = 0; i < 4; i++) {
-				items.add(new FeedItem(this.getContext(), type));
-				items.add(new FeedItem(this.getContext(), type));
-				items.add(new FeedItem(this.getContext(), type));
-				items.add(new FeedItem(this.getContext(), type));
+				items.add(new FeedItem(this.getContext(), type,feedids++));
+				items.add(new FeedItem(this.getContext(), type,feedids++));
+				items.add(new FeedItem(this.getContext(), type,feedids++));
+				items.add(new FeedItem(this.getContext(), type,feedids++));
 			}
 		}
-
+		((CronusApp)((MainActivity)this.getContext()).getApplication()).feedIDgen = feedids;
 		searchMode = false;
 		 
 	}

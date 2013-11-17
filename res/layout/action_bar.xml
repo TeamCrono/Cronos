@@ -5,14 +5,22 @@
     android:layout_height="match_parent" >
 	
     
-    
+    <ImageView
+        android:id="@+id/temp_cronos_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/temp_cronos_logo"
+        android:title="hamburger" />
+
     <ImageView
         android:id="@+id/action_search_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/action_item"
         android:layout_centerVertical="true"
-        android:background="@drawable/ic_menu_search"
+        android:src="@drawable/ic_action_search"
         android:title="Search Feeds" />
     
     <ImageView
@@ -21,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/feed_item_icon"
+        android:src="@drawable/ic_action_overflow"
         android:title="Get Item" />
 
     <EditText
@@ -41,8 +49,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/action_search_b"
-        android:text=""
-        android:visibility="gone" />
+        android:layout_toRightOf="@+id/temp_cronos_logo"
+        android:text="Cronus"
+         />
 
 </RelativeLayout>

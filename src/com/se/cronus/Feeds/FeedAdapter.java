@@ -1,9 +1,14 @@
-package com.se.cronus;
+package com.se.cronus.Feeds;
 
 import java.util.ArrayList;
 
+import com.se.cronus.R;
+import com.se.cronus.R.drawable;
+import com.se.cronus.R.id;
+import com.se.cronus.R.layout;
 import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
+import com.se.cronus.utils.CronusApp;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,6 +36,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 	ImageView headerLogo[];
 	LinearLayout feeditemlist[];
 	Feed[] values;
+	LinearLayout[] padding;//stuppid that it came to this
 	Context mContext;
 	private int numValues;
 
@@ -41,6 +47,8 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		feeditemlist = new LinearLayout[feeds.length];
 		mContext = context;
 		numValues = feeds.length;
+		padding = new LinearLayout[numValues];
+		
 	}
 
 	public Feed getFeed(int index) {
@@ -57,11 +65,15 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			// inflate the layout
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
 			convertView = inflater.inflate(R.layout.feed, null);
+			convertView.setPadding(0, 1, 0, 1);
+			convertView.setId(((CronusApp)((Activity)this.getContext()).getApplication()).feedIDgen++);
 		}
-		headerLogo[position] = (ImageView) convertView.findViewById(R.id.header);
+		headerLogo[position] = (ImageView) convertView.findViewById(R.id.feed_header);
 		headerLogo[position].setOnDragListener(dragger);
 		feeditemlist[position] = (LinearLayout) convertView
 				.findViewById(R.id.feeditemlist);
+		feeditemlist[position].setPadding(0, 0, 0, 0);
+		padding[position] = (LinearLayout) convertView.findViewById(R.id.feedpadding);
 
 		Feed f = values[position];
 		switch (f.type) {
@@ -69,18 +81,25 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			// Set the image view to Facebook
 			headerLogo[position].setImageResource(R.drawable.facebook_logo_crop);
 			feeditemlist[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
+			padding[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
 			break;
 		case CUtils.TWITTER_FEED:
 			headerLogo[position].setImageResource(R.drawable.twitter_logo);
 			feeditemlist[position].setBackgroundColor(CUtils.TWITTER_BLUE);
+			padding[position].setBackgroundColor(CUtils.TWITTER_BLUE);
+
 			break;
 		case CUtils.INSTA_FEED:
 			headerLogo[position].setImageResource(R.drawable.instagram_logo);
 			feeditemlist[position].setBackgroundColor(CUtils.INSTA_BROWN);
+			padding[position].setBackgroundColor(CUtils.INSTA_BROWN);
+
 			break;
 		case CUtils.PINTREST_FEED:
 			headerLogo[position].setImageResource(R.drawable.pinterest_logo);
 			feeditemlist[position].setBackgroundColor(CUtils.PINTREST_RED);
+			padding[position].setBackgroundColor(CUtils.PINTREST_RED);
+
 			break;
 		}
 

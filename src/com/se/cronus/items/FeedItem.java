@@ -1,6 +1,6 @@
 package com.se.cronus.items;
 
-import com.se.cronus.MainActivity;
+import com.se.cronus.AbstractCActivity;
 import com.se.cronus.R;
 import com.se.cronus.R.drawable;
 import com.se.cronus.utils.CUtils;
@@ -31,13 +31,14 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 	public int type;
 	private ImageView bg;
 	private TextView tv;
-	private int H = 150;
-	private int W = 150;
+	private int H = 200;
+	private int W = 200;
 	private Drawable bgpic;
 	private String tvstr;
 	private int itemid;
 	private ItemDoc Doc;
 	private ItemFragmentView view;
+	private RelativeLayout tvparent;
 	
 
 	public ItemDoc getDoc() {
@@ -76,13 +77,15 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		W = w;
 	}
 
-	public FeedItem(Context context, int type) {
+	public FeedItem(Context context, int type, int id) {
 		super(context);
 		// TODO Auto-generated constructor stub
 		this.type = type;
 		bg = new ImageView(context);
 		tv = new TextView(context);
 		Doc = new ItemDoc();
+		tvparent = new RelativeLayout(context);
+		this.setId(id);
 
 		this.setClickable(true);
 
@@ -92,7 +95,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 
 	}
 
-	public FeedItem(Context con, int type, ItemDoc doc) {
+	public FeedItem(Context con, int type, ItemDoc doc, int id) {
 		super(con);
 		createView(type, doc);
 		this.type = type;
@@ -100,7 +103,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		tv = new TextView(con);
 		Doc = new ItemDoc();
 		this.setClickable(true);
-
+		this.setId(id);
 		setLayoutParams();
 
 	}
@@ -131,7 +134,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		setLayoutParams(thisP);
 
 		this.addView(bg);
-		this.addView(tv);
+		this.addView(tvparent);
 
 		LayoutParams bgP = new LayoutParams(W, H);
 		bgP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -153,14 +156,19 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		// never ever forget this line
 		// d.recycle(); TODO :put this line in were ever we remove items
 
-		LayoutParams tvP = new LayoutParams(W, LayoutParams.WRAP_CONTENT);
+		LayoutParams tvP = new LayoutParams(W,  H);
+		LayoutParams tvPp= new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		tvP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		tvP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		tv.setLayoutParams(tvP);
+		tvPp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		tvP.addRule(RelativeLayout.CENTER_HORIZONTAL);
+		tvparent.setLayoutParams(tvP);
+		tvparent.addView(tv);
+		tv.setLayoutParams(tvPp);
 
 		if (tvstr == null)
 			if ( (Doc.getStatus() == null || Doc.getStatus().length() == 0))
-				tvstr = "TEST STATUS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+				tvstr = "This is my status about doing homework" + this.getId();
 			else
 				tvstr = Doc.getStatus();
 		tv.setText(tvstr);
@@ -173,7 +181,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 
 		tv.bringToFront();
 
-		this.setPadding(10, 7, 7, 10);
+		this.setPadding(0, 0, 1, 0);
 		this.setOnClickListener(this);
 
 	}
@@ -200,11 +208,11 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 			break;
 		}
 		if (view != null) {
-			MainActivity main = (MainActivity) this.getContext()
+			AbstractCActivity main = (AbstractCActivity) this.getContext()
 					.getApplicationContext();
 			main.changeItemFragment(view);
 		} else {
-			MainActivity main = (MainActivity) this.getContext();
+			AbstractCActivity main = (AbstractCActivity) this.getContext();
 			// .getApplicationContext();
 			main.changeItemFragment(new TestFragView(vx.type, this.getContext()));
 		}
@@ -214,34 +222,28 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		// TODO: get new fonts
 		switch (type) {
 		case CUtils.FACEBOOK_FEED:
-			tv.setBackgroundColor(CUtils.FACEBOOK_BLUE_CLEAR);
+			tvparent.setBackgroundResource(R.drawable.grad_facebook);
 			break;
 		case CUtils.TWITTER_FEED:
-			tv.setBackgroundColor(CUtils.TWITTER_BLUE_CLEAR);
+			tvparent.setBackgroundResource(R.drawable.grad_twit);
 			tv.setTextColor(Color.BLACK);
 			break;
 		case CUtils.INSTA_FEED:
-			tv.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
+			tvparent.setBackgroundResource(R.drawable.grad_insta);
+			//tv.setTextColor(Color.WHITE);
 			break;
 		case CUtils.PINTREST_FEED:
-			tv.setBackgroundColor(CUtils.PINTREST_RED_CLEAR);
+			tvparent.setBackgroundResource(R.drawable.grad_pin);
 		}
 
 	}
 
 	
 	
-	@Override
-	public boolean equals(Object o) {
+	public boolean equals(FeedItem o) {
 		// TODO Auto-generated method stub
-		FeedItem fi;
-		try {
-			fi = (FeedItem) o;
-		}catch (Error e){
-			return false;
-		}
 		
-		return fi.getDoc().equals(Doc);
+		return o.getDoc().equals(Doc);
 		
 		//return super.equals(o);
 	}

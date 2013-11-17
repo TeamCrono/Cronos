@@ -54,7 +54,7 @@ public class CUtils {
 			255, 152);
 
 	/* FONTS AND LETTERING AND NUMBER STUFF */
-	public static final float FONT_SIZE_SMALL = 12;
+	public static final float FONT_SIZE_SMALL = 18;
 	
 
 	/*

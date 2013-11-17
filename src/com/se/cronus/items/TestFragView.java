@@ -17,8 +17,8 @@ public class TestFragView extends ItemFragmentView {
 	protected void onCreate() {
 		// TODO Auto-generated method stub
 		testviewtextlongnameeasytofind = new TextView(this.getContext());
-		testviewtextlongnameeasytofind.setText("" + getType());
-		testviewtextlongnameeasytofind.setTextSize(testviewtextlongnameeasytofind.getTextSize()*5);
+		testviewtextlongnameeasytofind.setText("This will show more information on any image you click to the left! \n\n Go ahead try it!  \n\n" + getType());
+		testviewtextlongnameeasytofind.setTextSize(testviewtextlongnameeasytofind.getTextSize());
 	
 		this.addView(testviewtextlongnameeasytofind);
 	

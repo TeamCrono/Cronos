@@ -2,7 +2,10 @@ package com.se.cronus.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import com.se.cronus.MainActivity;
+import com.se.cronus.R;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -20,10 +23,11 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
+
 /***
  * 
  * @author dj
- *
+ * 
  */
 public class CUtils {
 	private static final int CLEAR = 150;
@@ -55,7 +59,6 @@ public class CUtils {
 
 	/* FONTS AND LETTERING AND NUMBER STUFF */
 	public static final float FONT_SIZE_SMALL = 18;
-	
 
 	/*
 	 * static methods
@@ -97,8 +100,8 @@ public class CUtils {
 	}
 
 	public static int findIdByString(Activity thisA, String ID) {
-		int resID = thisA.getResources()
-				.getIdentifier(ID, "id", "com.se.cronus");
+		int resID = thisA.getResources().getIdentifier(ID, "id",
+				"com.se.cronus");
 		return resID;
 	}
 
@@ -167,33 +170,43 @@ public class CUtils {
 		return android.os.Build.VERSION.SDK_INT >= minV;
 	}
 
-	public static Bitmap drawableToBitmap(Activity activity, Drawable drawable, int W, int H) {
-		
+	public static Bitmap drawableToBitmap(Activity activity, Drawable drawable,
+			int W, int H) {
+
 		Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
 				drawable.getIntrinsicHeight(), Config.ARGB_8888);
 		Canvas canvas = new Canvas(bitmap);
 		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
 		drawable.draw(canvas);
 
-		if(W==H){//is a square
+		if (W == H) {// is a square
 			int h = bitmap.getHeight();
 			int w = bitmap.getWidth();
 			int crop = 0;
 			Bitmap nbitmap;
-			if(h<w){// crop sides
-				crop = (int) (w-h)/2;
-				nbitmap = Bitmap.createBitmap(bitmap, crop, 0, w-crop, h);
+			if (h < w) {// crop sides
+				crop = (int) (w - h) / 2;
+				nbitmap = Bitmap.createBitmap(bitmap, crop, 0, w - crop, h);
 				nbitmap = Bitmap.createScaledBitmap(nbitmap, W, H, false);
+				if (!nbitmap.equals(bitmap)) {
+					bitmap.recycle();
+					System.out.println("bitmap.recycle();");
+				}
 				return nbitmap;
 			}
-			if(h>w){//crop top and bottom
-				crop = (int) (w-h)/2;
-				nbitmap = Bitmap.createBitmap(bitmap, 0, crop, w, h-crop);
+			if (h > w) {// crop top and bottom
+				crop = (int) (w - h) / 2;
+				nbitmap = Bitmap.createBitmap(bitmap, 0, crop, w, h - crop);
 				nbitmap = Bitmap.createScaledBitmap(nbitmap, W, H, false);
+				if (!nbitmap.equals(bitmap)) {
+					bitmap.recycle();
+					System.out.println("bitmap.recycle();");
+				}
+				bitmap.recycle();
 				return nbitmap;
 			}
 		}
-		
+
 		bitmap = Bitmap.createScaledBitmap(bitmap, W, H, false);
 
 		return bitmap;

@@ -2,6 +2,7 @@ package com.se.cronus.Feeds;
 
 import java.util.ArrayList;
 
+import com.se.cronus.MainActivity;
 import com.se.cronus.R;
 import com.se.cronus.R.drawable;
 import com.se.cronus.R.id;
@@ -10,21 +11,31 @@ import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
 import com.se.cronus.utils.CronusApp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.AbsListView.OnScrollListener;
+import android.widget.RelativeLayout;
 
 /***
  * 
@@ -36,9 +47,10 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 	ImageView headerLogo[];
 	LinearLayout feeditemlist[];
 	Feed[] values;
-	LinearLayout[] padding;//stuppid that it came to this
+	LinearLayout[] padding;// stuppid that it came to this
 	Context mContext;
 	private int numValues;
+	MainActivity main;
 
 	public FeedAdapter(Context context, Feed[] feeds, int r) {
 		super(context, r, feeds);
@@ -48,7 +60,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		mContext = context;
 		numValues = feeds.length;
 		padding = new LinearLayout[numValues];
-		
+		main = (MainActivity) context;
 	}
 
 	public Feed getFeed(int index) {
@@ -66,20 +78,133 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
 			convertView = inflater.inflate(R.layout.feed, null);
 			convertView.setPadding(0, 1, 0, 1);
-			convertView.setId(((CronusApp)((Activity)this.getContext()).getApplication()).feedIDgen++);
+			convertView.setId(((CronusApp) ((Activity) this.getContext())
+					.getApplication()).feedIDgen++);
 		}
-		headerLogo[position] = (ImageView) convertView.findViewById(R.id.feed_header);
-		headerLogo[position].setOnDragListener(dragger);
+		headerLogo[position] = (ImageView) convertView
+				.findViewById(R.id.feed_header);
+		
+		
+		
+//		headerLogo[position].setOnTouchListener(new OnTouchListener() {
+//
+//							@Override
+//							public boolean onTouch(View v, MotionEvent event) {
+//								// TODO Auto-generated method stub
+//								if (Math.abs(event.getY() - v.getY()) > 10.0)
+//									((LinearLayout)v.getParent().getParent()).setY(event.getY());
+//								return true;
+//							}
+//
+//						});
+		
+		
+		//one posibility
+//		headerLogo[position].setOnClickListener(new OnClickListener() {
+//
+//			@SuppressLint("NewApi")
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				// RelativeLayout view = new RelativeLayout(mContext);
+//				LinearLayout view = new LinearLayout(mContext);
+//				view.setLayoutParams(new LayoutParams(CUtils
+//						.getScreenWidth(main), CUtils.getScreenHeight(main)));
+//				view.setOrientation(LinearLayout.VERTICAL);
+//
+//				final Dialog d = new Dialog(mContext);
+//				d.setTitle("Drag to Reorder");
+//				Button back = new Button(mContext);
+//				back.setOnClickListener(new OnClickListener() {
+//
+//					@Override
+//					public void onClick(View v) {
+//						// TODO Auto-generated method stub
+//						d.hide();
+//					}
+//
+//				});
+//				d.setContentView(view);
+//
+//				view.addView(back);
+//
+//				for (int i = 0; i < headerLogo.length; i++) {
+//					if (headerLogo[i] != null) {
+//						Drawable btemp = headerLogo[i].getDrawable().mutate();
+//						// RelativeLayout.LayoutParams ltemp = new
+//						// RelativeLayout.LayoutParams(
+//						// LayoutParams.WRAP_CONTENT,
+//						// LayoutParams.WRAP_CONTENT);
+//						// ltemp.addRule(RelativeLayout.BELOW,
+//						// view.getChildAt(i)
+//						// .getId());
+//						ImageView temp = new ImageView(mContext);
+//						temp.setBackground(btemp);
+//						view.addView(temp);
+//						temp.setLayoutParams(new LinearLayout.LayoutParams(
+//								LayoutParams.WRAP_CONTENT,
+//								LayoutParams.WRAP_CONTENT));
+//						temp.setOnTouchListener(new OnTouchListener() {
+//
+//							@Override
+//							public boolean onTouch(View v, MotionEvent event) {
+//								// TODO Auto-generated method stub
+//								if (Math.abs(event.getY() - v.getY()) > 10.0)
+//									v.setY(event.getY());
+//								return true;
+//							}
+//
+//						});
+//					}
+//				}
+//
+//				d.show();
+//			}
+//
+//		});
+//		headerLogo[position].setOnDragListener(new OnDragListener() {
+//
+//			@Override
+//			public boolean onDrag(View v, DragEvent event) {
+//				// TODO Auto-generated method stub
+//				int i;
+//				for (i = 0; i < numValues; i++) {
+//					if (v.getId() == headerLogo[i].getId()) {
+//						// TODO: dragged a header logo, do stuff!!!
+//						((HorizontalScrollView) v.getParent()).setY(event
+//								.getY());
+//						return true;
+//					}
+//				}
+//				return false;
+//			}
+//
+//		});
 		feeditemlist[position] = (LinearLayout) convertView
 				.findViewById(R.id.feeditemlist);
 		feeditemlist[position].setPadding(0, 0, 0, 0);
-		padding[position] = (LinearLayout) convertView.findViewById(R.id.feedpadding);
+		padding[position] = (LinearLayout) convertView
+				.findViewById(R.id.feedpadding);
+
+		((HorizontalScrollView) feeditemlist[position].getParent())
+				.setOnTouchListener(new OnTouchListener() {
+
+					@Override
+					public boolean onTouch(View v, MotionEvent event) {
+						// TODO Auto-generated method stub
+
+						return false;
+					}
+				});
+		((HorizontalScrollView) feeditemlist[position].getParent()).getScrollX();
+		// ((HorizontalScrollView)feeditemlist[position].getParent()).on
 
 		Feed f = values[position];
 		switch (f.type) {
 		case CUtils.FACEBOOK_FEED:
 			// Set the image view to Facebook
-			headerLogo[position].setImageResource(R.drawable.facebook_logo_crop);
+			headerLogo[position]
+					.setImageResource(R.drawable.facebook_logo_crop);
 			feeditemlist[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
 			padding[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
 			break;
@@ -105,12 +230,14 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 
 		// checks on checks
 		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type) {
-			updateItems(f.items, f.type,position);
+			updateItems(f.items, f.type, position);
 			f.isInit = true;
 		}
 		return convertView;
 	}
-	//This will eventually be fixed to be more object oriented stile and no so C code looking
+
+	// This will eventually be fixed to be more object oriented stile and no so
+	// C code looking
 	private void updateItems(ArrayList<FeedItem> items, int type, int position) {
 		// TODO Auto-generated method stub
 		// lots of checks to avoid random acurences trust me all needed.
@@ -131,21 +258,24 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 	}
 
 	public void updateItems(int feedOrPosition, boolean isfeed) {
-		if(isfeed)
-		for (int i = 0; i < values.length; i++) {
-			if (values[i].type == feedOrPosition) {
-				updateItems(values[i].items, feedOrPosition, i);
+		if (isfeed)
+			for (int i = 0; i < values.length; i++) {
+				if (values[i].type == feedOrPosition) {
+					updateItems(values[i].items, feedOrPosition, i);
+				}
 			}
-		}
 		else
-			updateItems(values[feedOrPosition].items, values[feedOrPosition].type, feedOrPosition);
+			updateItems(values[feedOrPosition].items,
+					values[feedOrPosition].type, feedOrPosition);
 	}
 
 	public void resetItems() {
-		
+
 		if (values[0].isSearchMode())
 			for (int i = 0; i < values.length; i++) {
-				feeditemlist[i].removeAllViews();//this is null, lets find out why!
+				if (feeditemlist[i] != null)
+					feeditemlist[i].removeAllViews();// this is null, lets find
+														// out why!
 				updateItems(values[i].getSearch(), values[i].type, i);
 			}
 		else
@@ -154,20 +284,5 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 				updateItems(values[i].items, values[i].type, i);
 			}
 	}
-	
-	private OnDragListener dragger = new OnDragListener(){
 
-		@Override
-		public boolean onDrag(View v, DragEvent event) {
-			// TODO Auto-generated method stub
-			int i;
-			for(i = 0; i < numValues; i++){
-				if(v.getId() == headerLogo[i].getId()){
-					//TODO: dragged a header logo, do stuff!!!
-				}
-			}
-			return false;
-		}
-		
-	};
 }

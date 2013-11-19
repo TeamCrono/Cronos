@@ -1,7 +1,10 @@
 package com.se.cronus.items;
 
+import com.se.cronus.R;
+
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 public abstract class ItemFragmentView extends /*View*/ FrameLayout {
@@ -11,11 +14,18 @@ public abstract class ItemFragmentView extends /*View*/ FrameLayout {
 	
 	protected ItemFragmentCntrl clicklistener;
 	
+	
+	// stuff
+	Button add;
 	public ItemFragmentView(int t, Context c){
 		super(c);
 		this.setType(t);
 		onCreate();
 		setLayoutParams();
+		add = new Button(this.getContext());
+		this.addView(add);
+		
+		
 	}
 
 	public int getType() {

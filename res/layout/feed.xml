@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingTop="5dp" >
 
     <RelativeLayout
+        android:id="@+id/feed_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:layout_gravity="bottom" >
 
         <ImageView
@@ -49,8 +52,11 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/feed_body"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/feed_head" >
 
         <LinearLayout
             android:id="@+id/feedpadding"
@@ -72,4 +78,36 @@
         </HorizontalScrollView>
     </LinearLayout>
 
-</LinearLayout>
+    <RelativeLayout
+        android:id="@+id/feed_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/feed_nav_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:src="@drawable/navigation_collapse"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/feed_nav_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:clickable="true"
+            android:src="@drawable/navigation_expand"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+</RelativeLayout>

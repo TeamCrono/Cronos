@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 public class TestFragView extends ItemFragmentView {
 	private TextView testviewtextlongnameeasytofind;
-	public TestFragView(int t, Context c) {
-		super(t, c);
+	public TestFragView(ItemDoc d, Context c) {
+		super(d, c);
 		// TODO Auto-generated constructor stub
 		
 	}

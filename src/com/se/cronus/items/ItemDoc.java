@@ -38,7 +38,7 @@ public class ItemDoc {
 		
 	}
 
-	ItemDoc() {
+	public ItemDoc() {
 		// set defaults to null!!
 		img = null;
 		profPic = null;

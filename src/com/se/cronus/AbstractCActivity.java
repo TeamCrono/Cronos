@@ -4,6 +4,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnClosedListener;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 import com.se.cronus.Feeds.Feed;
+import com.se.cronus.items.ItemDoc;
 import com.se.cronus.items.ItemFragmentView;
 import com.se.cronus.items.TestFragView;
 import com.se.cronus.utils.CUtils;
@@ -90,9 +91,9 @@ OnClickListener {
 
 		// set up list Adapter
 		setUpProfile();
-	
+		ItemDoc faker = new ItemDoc();
 		setUpActionBar();
-		setUpItemFragment(new TestFragView(CUtils.TEST_FEED, this));
+		setUpItemFragment(new TestFragView(faker, this));
 		
 		// set onclicks
 		setUpOnClicks();

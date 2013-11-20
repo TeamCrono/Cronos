@@ -6,8 +6,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
-public abstract class ItemFragmentView extends /*View*/ FrameLayout {
+public abstract class ItemFragmentView extends /*View*/ RelativeLayout {
 	
 	private ItemDoc doc;
 	private int type;
@@ -16,14 +17,14 @@ public abstract class ItemFragmentView extends /*View*/ FrameLayout {
 	
 	
 	// stuff
-	Button add;
-	public ItemFragmentView(int t, Context c){
+	
+	public ItemFragmentView(ItemDoc d, Context c){
 		super(c);
-		this.setType(t);
+		this.setType(d.getType());
+		
 		onCreate();
 		setLayoutParams();
-		add = new Button(this.getContext());
-		this.addView(add);
+		
 		
 		
 	}

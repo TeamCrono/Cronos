@@ -214,7 +214,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		} else {
 			AbstractCActivity main = (AbstractCActivity) this.getContext();
 			// .getApplicationContext();
-			main.changeItemFragment(new TestFragView(vx.type, this.getContext()));
+			main.changeItemFragment(new TestFragView(vx.getDoc(), this.getContext()));
 		}
 	}
 

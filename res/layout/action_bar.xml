@@ -25,6 +25,16 @@
         android:title="Search Feeds" />
     
     <ImageView
+        android:id="@+id/action_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/action_item"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_done"
+        android:visibility="gone"
+        android:title="Search Feeds" />
+    
+    <ImageView
         android:id="@+id/action_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

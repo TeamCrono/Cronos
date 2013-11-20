@@ -8,6 +8,10 @@
         android:minSdkVersion="14"
         android:targetSdkVersion="18" />
 
+
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
         android:name="com.se.cronus.utils.CronusApp"
         android:allowBackup="true"

@@ -193,31 +193,37 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int twitter_logo=0x7f020032;
     }
     public static final class id {
+        public static final int action_done=0x7f050009;
         public static final int action_item=0x7f050008;
         public static final int action_search_b=0x7f050007;
-        public static final int action_search_et=0x7f050009;
-        public static final int action_search_tv=0x7f05000a;
-        public static final int action_settings=0x7f050018;
+        public static final int action_search_et=0x7f05000a;
+        public static final int action_search_tv=0x7f05000b;
+        public static final int action_settings=0x7f05001e;
         public static final int acton_bar=0x7f050005;
-        public static final int button1=0x7f050014;
-        public static final int button2=0x7f050015;
-        public static final int facebook_bt_killpeople=0x7f050016;
-        public static final int feed_full=0x7f05000f;
-        public static final int feed_header=0x7f05000d;
-        public static final int feed_refresh=0x7f050010;
-        public static final int feed_subtitle=0x7f05000e;
-        public static final int feeditemlist=0x7f050012;
-        public static final int feedlist=0x7f05000c;
-        public static final int feedpadding=0x7f050011;
-        public static final int fragment_container=0x7f05000b;
+        public static final int button1=0x7f05001a;
+        public static final int button2=0x7f05001b;
+        public static final int facebook_bt_killpeople=0x7f05001c;
+        public static final int feed_body=0x7f050013;
+        public static final int feed_full=0x7f050011;
+        public static final int feed_head=0x7f05000e;
+        public static final int feed_header=0x7f05000f;
+        public static final int feed_nav_down=0x7f050018;
+        public static final int feed_nav_up=0x7f050017;
+        public static final int feed_overlay=0x7f050016;
+        public static final int feed_refresh=0x7f050012;
+        public static final int feed_subtitle=0x7f050010;
+        public static final int feeditemlist=0x7f050015;
+        public static final int feedlist=0x7f05000d;
+        public static final int feedpadding=0x7f050014;
+        public static final int fragment_container=0x7f05000c;
         public static final int fullscreen=0x7f050003;
         public static final int left=0x7f050000;
         public static final int margin=0x7f050002;
         public static final int right=0x7f050001;
         public static final int selected_view=0x7f050004;
-        public static final int slidingmenumain=0x7f050017;
+        public static final int slidingmenumain=0x7f05001d;
         public static final int temp_cronos_logo=0x7f050006;
-        public static final int testtestclick=0x7f050013;
+        public static final int testtestclick=0x7f050019;
     }
     public static final class integer {
         public static final int num_cols=0x7f070000;

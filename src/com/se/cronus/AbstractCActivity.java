@@ -71,7 +71,7 @@ OnClickListener {
 	protected ActionBar act;
 	protected ImageView item;
 	protected ImageView search;
-	protected EditText searchText;
+	protected EditText searchTextE;
 	protected TextView searchTextV;
 
 	FragmentTransaction ft;
@@ -240,7 +240,7 @@ OnClickListener {
 					@Override
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
-						profileShowTest();
+						//profileShowTest();
 					}
 
 				});
@@ -253,25 +253,25 @@ OnClickListener {
 	}
 
 	protected void setUpActionBar() {
-		ImageView hamburger = new ImageView(this);
-		hamburger.setBackgroundResource(R.drawable.ic_drawer);
+		ImageView icon = new ImageView(this);
+		icon.setBackgroundResource(R.drawable.temp_cronos_logo);
 		act = this.getActionBar();
 		act.setBackgroundDrawable(new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
-		act.setIcon(com.se.cronus.R.drawable.ic_drawer);
+		act.setIcon(com.se.cronus.R.drawable.temp_cronos_logo);
 		act.setCustomView(com.se.cronus.R.layout.action_bar);
 		act.setDisplayHomeAsUpEnabled(true);
 		act.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM
 				| ActionBar.DISPLAY_SHOW_HOME);
-		((ViewGroup)act.getCustomView().getParent()).addView(hamburger);
+		((ViewGroup)act.getCustomView().getParent()).addView(icon);
 		// extra icons
 		search = (ImageView) findViewById(com.se.cronus.R.id.action_search_b);
-		searchText = (EditText) findViewById(com.se.cronus.R.id.action_search_et);
+		searchTextE = (EditText) findViewById(com.se.cronus.R.id.action_search_et);
 		searchTextV = (TextView) findViewById(com.se.cronus.R.id.action_search_tv);
 		item = (ImageView) findViewById(com.se.cronus.R.id.action_item);
 
-		searchText.setTextColor(Color.WHITE);
-		searchText.setTextSize(15);
-		searchText.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+		searchTextE.setTextColor(Color.WHITE);
+		searchTextE.setTextSize(15);
+		searchTextE.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
 
 		searchTextV.setTextColor(Color.WHITE);
 		searchTextV.setTextSize(15);
@@ -374,7 +374,7 @@ OnClickListener {
 	}
 
 	public void viewCurItem() {
-		//item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon_back);
+		item.setBackgroundResource(com.se.cronus.R.drawable.navigation_previous_item);
 		// go Right
 
 		curAttatched.showMenu(true);
@@ -387,7 +387,7 @@ OnClickListener {
 	protected void viewMain() {
 		// goleft
 		if (curAttatched.isMenuShowing()) {
-			//item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon);
+			item.setBackgroundResource(com.se.cronus.R.drawable.navigation_next_item);
 			curAttatched.showContent(true);
 		}
 		if (profile.isMenuShowing()) {

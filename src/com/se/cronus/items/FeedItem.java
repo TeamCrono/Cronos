@@ -143,7 +143,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		if (bgpic == null)
 			if ( Doc.getImg() == null)
 				bgpic = this.getResources().getDrawable(
-						R.drawable.deadpool_profile_pic_test);
+						R.drawable.deadpool_profile_pic_test).mutate();
 			else
 				bgpic = Doc.getImg();
 
@@ -278,7 +278,10 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 	public void setItemid(int itemid) {
 		this.itemid = itemid;
 	}
-
+	public void onRemoval(){
+		//TODO
+		
+	}
 	public boolean search(String toFind) {
 		// TODO Come up with a good way to search through stuff
 		if(Doc.getAuthor().contains(toFind))

@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -68,7 +70,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	ListView FeedList;
 	FeedAdapter feedAdapt;
 	Feed[] FeedArray;
-
+	boolean searchB;
 	// Keyboard stuff
 	InputMethodManager imm;
 
@@ -78,16 +80,16 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(com.se.cronus.R.layout.activity_main);
-
+		searchB = false;
 		/* THIS SECTION DEALS WITH FEED ADAPTERS AND STUFFS */
-		
+
 		// general utilities for app
-				imm = (InputMethodManager) this
-						.getSystemService(Service.INPUT_METHOD_SERVICE);
-		
+		imm = (InputMethodManager) this
+				.getSystemService(Service.INPUT_METHOD_SERVICE);
+
 		this.profile.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
 		this.curAttatched.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-		
+
 		if (TESTING) {
 			setTestingFeedArray();
 		} else {
@@ -96,8 +98,8 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		}
 
 		setUpListAdapter();
-		parent = (FrameLayout)findViewById(R.id.fragment_container);
-		
+		parent = (FrameLayout) findViewById(R.id.fragment_container);
+
 		this.parent.setBackgroundColor(Color.rgb(62, 83, 93));
 		/* THIS SECTION IS FOR INIT AND DESIGN STUFF */
 	}
@@ -110,13 +112,45 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		curAttatched.showMenu(true);
 		return true;
 	}
-	
+
 	private void setUpListAdapter() {
 		FeedList = (ListView) findViewById(com.se.cronus.R.id.feedlist);
 		feedAdapt = new FeedAdapter(this, FeedArray,
 				com.se.cronus.R.id.feedlist); // newFeedList.getId());
 
 		FeedList.setAdapter(feedAdapt);
+		FeedList.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				// Algorithm to check if the last item is visible or not
+				final int lastItem = firstVisibleItem + visibleItemCount;
+				if (lastItem == totalItemCount) {
+					// you have reached end of list, load more data
+					updateAllFeeds();
+				}
+				if(firstVisibleItem == 0){
+					// you have reached beginning of list, load more data
+					updateAllFeeds();
+				}
+			}
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				// blank, not using this
+				
+			}
+		});
+		
+	}
+
+	public void updateAllFeeds() {
+		// TODO Auto-generated method stub
+		System.out.print("updateAllFeeds");
+	}
+	public void updateFeedAt(int index){
+		//TODO
 	}
 
 	private void setFeedArray() {
@@ -144,50 +178,49 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		feedAdapt.resetItems();
 	}
 
-	protected void setUpActionBar(){
+	protected void setUpActionBar() {
 		super.setUpActionBar();
-		
+
 	}
-	
-	
+
 	protected void offSearch() {
 		for (int i = 0; i < feedAdapt.getCount(); i++) {
 			feedAdapt.getFeed(i).offSearch();
 		}
 		feedAdapt.resetItems();
 	}
+
 	public void addFeed(Feed f) {
 		feedAdapt.add(f);
 
 	}
+
 	protected void onSearchClick() {
 		// enable search
-		if (searchText.getVisibility() == View.GONE
-				) {
+		if (searchTextE.getVisibility() == View.GONE && !searchB) {
 			searchTextV.setText("");
-			searchText.setVisibility(View.VISIBLE);
-			searchText.setFocusableInTouchMode(true);
-			searchText.setFocusable(true);
-			searchText.requestFocus();
-			searchText.setSelected(true);
-			imm.showSoftInput(searchText, 0);
-
+			searchTextE.setVisibility(View.VISIBLE);
+			searchTextE.setFocusableInTouchMode(true);
+			searchTextE.setFocusable(true);
+			searchTextE.requestFocus();
+			searchTextE.setSelected(true);
+			imm.showSoftInput(searchTextE, 0);
 			return;
 		}
 		// clear search
-		if (searchText.getVisibility() == View.GONE
-				&& searchTextV.getText()!="Cronus") {
+		if (searchTextE.getVisibility() == View.GONE && searchB) {
 			searchTextV.setText("Cronus");
-			//searchTextV.setVisibility(View.GONE);
-			searchText.setText("");
-			searchText.setVisibility(View.GONE);
+			// searchTextV.setVisibility(View.GONE);
+			searchTextE.setText("");
+			searchTextE.setVisibility(View.GONE);
 			offSearch();
+			searchB = !searchB;
+			return;
 		}
 		// search
-		if (searchText.getVisibility() == View.VISIBLE
-				) {
-			imm.hideSoftInputFromWindow(searchText.getWindowToken(), 0);
-			String toSearch = searchText.getText().toString().trim();
+		if (searchTextE.getVisibility() == View.VISIBLE && !searchB) {
+			imm.hideSoftInputFromWindow(searchTextE.getWindowToken(), 0);
+			String toSearch = searchTextE.getText().toString().trim();
 			String title;
 			if (toSearch.length() > 1) {
 				int max = 32;
@@ -203,23 +236,25 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 				}
 				searchTextV.setText(title);
 				searchTextV.setVisibility(View.VISIBLE);
-				searchText.setText("");
-				searchText.setVisibility(View.GONE);
+				searchTextE.setText("");
+				searchTextE.setVisibility(View.GONE);
 				// TODO: do search
 				onSearch(toSearch);
 				viewMain();
+				searchB = !searchB;
 				return;
 			}
 
 		}
 	}
-	
+
 	protected void onOpenItem() {
 		System.out.println("onOpenItem");
-		//item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon_back);
+		item.setBackgroundResource(com.se.cronus.R.drawable.navigation_previous_item);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
-		
-		CUR = RIGHT;	}
+
+		CUR = RIGHT;
+	}
 
 	// disable curitem
 	protected void onOpenProfile() {
@@ -232,21 +267,19 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	// enable both drares
 	protected void onOpenMain() {
 		System.out.println("onOpenMain");
-		//item.setBackgroundResource(com.se.cronus.R.drawable.feed_item_icon);
+		item.setBackgroundResource(com.se.cronus.R.drawable.navigation_next_item);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		curAttatched.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		CUR = MAIN;
 	}
 
-	protected void setUpOnClicks(){
+	protected void setUpOnClicks() {
 		super.setUpOnClicks();
 	}
-	
+
 	@Override
-	public void onClick(View v){
+	public void onClick(View v) {
 		super.onClick(v);
 	}
 
-	
-	
 }

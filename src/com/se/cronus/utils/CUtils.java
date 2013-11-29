@@ -8,6 +8,7 @@ import com.se.cronus.R;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -22,6 +23,7 @@ import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 
 /***
@@ -217,4 +219,13 @@ public class CUtils {
 		options.inSampleSize = 4;
 
 	}
+	
+	public int genCronusID(Context con){
+		CronusApp appthis = ((CronusApp)((MainActivity)con).getApplication());
+		appthis.feedIDgen++;
+		return appthis.feedIDgen;
+		
+	}
+	
+	
 }

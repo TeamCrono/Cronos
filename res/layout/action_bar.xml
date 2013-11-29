@@ -19,7 +19,7 @@
         android:id="@+id/action_search_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/action_item"
+        android:layout_toLeftOf="@+id/action_refresh"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_action_search"
         android:title="Search Feeds" />
@@ -28,7 +28,7 @@
         android:id="@+id/action_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/action_item"
+        android:layout_toLeftOf="@+id/action_refresh"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_action_done"
         android:visibility="gone"
@@ -43,6 +43,15 @@
         android:background="@drawable/navigation_next_item"
         android:title="Get Item" />
 
+     <ImageView
+        android:id="@+id/action_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/action_item"
+        android:layout_centerVertical="true"
+        android:src="@drawable/ic_action_refresh"
+        android:title="refresh feeds" />
+    
     <EditText
         android:id="@+id/action_search_et"
         android:layout_width="wrap_content"

@@ -39,7 +39,6 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 	private ItemDoc Doc;
 	private ItemFragmentView view;
 	private RelativeLayout tvparent;
-	
 
 	public ItemDoc getDoc() {
 		return Doc;
@@ -91,8 +90,6 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 
 		setLayoutParams();
 
-		
-
 	}
 
 	public FeedItem(Context con, int type, ItemDoc doc, int id) {
@@ -101,7 +98,9 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		this.type = type;
 		bg = new ImageView(con);
 		tv = new TextView(con);
-		Doc = new ItemDoc();
+		Doc = doc;
+		tvparent = new RelativeLayout(con);
+
 		this.setClickable(true);
 		this.setId(id);
 		setLayoutParams();
@@ -135,15 +134,18 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 
 		this.addView(bg);
 		this.addView(tvparent);
+		
+			
 
 		LayoutParams bgP = new LayoutParams(W, H);
 		bgP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		bg.setLayoutParams(bgP);
 
 		if (bgpic == null)
-			if ( Doc.getImg() == null)
-				bgpic = this.getResources().getDrawable(
-						R.drawable.deadpool_profile_pic_test).mutate();
+			if (Doc.getImg() == null)
+				bgpic = this.getResources()
+						.getDrawable(R.drawable.deadpool_profile_pic_test)
+						.mutate();
 			else
 				bgpic = Doc.getImg();
 
@@ -156,8 +158,9 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		// never ever forget this line
 		// d.recycle(); TODO :put this line in were ever we remove items
 
-		LayoutParams tvP = new LayoutParams(W,  H);
-		LayoutParams tvPp= new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		LayoutParams tvP = new LayoutParams(W, H);
+		LayoutParams tvPp = new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
 		tvP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		tvP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		tvPp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -167,7 +170,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		tv.setLayoutParams(tvPp);
 
 		if (tvstr == null)
-			if ( (Doc.getStatus() == null || Doc.getStatus().length() == 0))
+			if ((Doc.getStatus() == null || Doc.getStatus().length() == 0))
 				tvstr = "This is my status about doing homework" + this.getId();
 			else
 				tvstr = Doc.getStatus();
@@ -214,38 +217,51 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		} else {
 			AbstractCActivity main = (AbstractCActivity) this.getContext();
 			// .getApplicationContext();
-			main.changeItemFragment(new TestFragView(vx.getDoc(), this.getContext()));
+			main.changeItemFragment(new TestFragView(vx.getDoc(), this
+					.getContext()));
 		}
 	}
 
+	@SuppressLint("NewApi")
 	private void fixColors() {// not really needed
 		// TODO: get new fonts
+		Bitmap temp = null;
 		switch (type) {
 		case CUtils.FACEBOOK_FEED:
-			tvparent.setBackgroundResource(R.drawable.grad_facebook);
+			temp = CUtils.drawableToBitmap(((Activity) this.getContext()), this
+					.getResources().getDrawable(R.drawable.grad_facebook)
+					.mutate(), W, H);
+
 			break;
 		case CUtils.TWITTER_FEED:
-			tvparent.setBackgroundResource(R.drawable.grad_twit);
-			tv.setTextColor(Color.BLACK);
+			temp = CUtils.drawableToBitmap(((Activity) this.getContext()), this
+					.getResources().getDrawable(R.drawable.grad_twit).mutate(),
+					W, H);
+
 			break;
 		case CUtils.INSTA_FEED:
-			tvparent.setBackgroundResource(R.drawable.grad_insta);
-			//tv.setTextColor(Color.WHITE);
+			temp = CUtils.drawableToBitmap(((Activity) this.getContext()),
+					this.getResources().getDrawable(R.drawable.grad_insta)
+							.mutate(), W, H);
+
 			break;
 		case CUtils.PINTREST_FEED:
-			tvparent.setBackgroundResource(R.drawable.grad_pin);
-		}
+			temp = CUtils.drawableToBitmap(((Activity) this.getContext()), this
+					.getResources().getDrawable(R.drawable.grad_pin).mutate(),
+					W, H);
 
+			break;
+		}
+		if (temp != null)
+			tvparent.setBackground(new BitmapDrawable(getResources(), temp));
 	}
 
-	
-	
 	public boolean equals(FeedItem o) {
 		// TODO Auto-generated method stub
-		
+
 		return o.getDoc().equals(Doc);
-		
-		//return super.equals(o);
+
+		// return super.equals(o);
 	}
 
 	private void openTwitter() {
@@ -278,32 +294,33 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 	public void setItemid(int itemid) {
 		this.itemid = itemid;
 	}
-	public void onRemoval(){
-		//TODO
-		
+
+	public void onRemoval() {
+		// TODO
+
 	}
+
 	public boolean search(String toFind) {
 		// TODO Come up with a good way to search through stuff
-		if(Doc.getAuthor().contains(toFind))
+		if (Doc.getAuthor().contains(toFind))
 			return true;
-		if(Doc.getStatus().contains(toFind))
+		if (Doc.getStatus().contains(toFind))
 			return true;
-		for(Pair<String, String> c :Doc.getComments()){
-			if(c.first.contains(toFind))
+		for (Pair<String, String> c : Doc.getComments()) {
+			if (c.first.contains(toFind))
 				return true;
-			if(c.second.contains(toFind))
-				return true;
-		}
-		for(String l : Doc.getWhoLiked()){
-			if(l.contains(toFind))
+			if (c.second.contains(toFind))
 				return true;
 		}
-		for(String s : Doc.getWhoShared()){
-			if(s.contains(toFind))
+		for (String l : Doc.getWhoLiked()) {
+			if (l.contains(toFind))
 				return true;
 		}
-		
-		
+		for (String s : Doc.getWhoShared()) {
+			if (s.contains(toFind))
+				return true;
+		}
+
 		return false;
 	}
 

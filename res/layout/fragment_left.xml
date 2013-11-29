@@ -14,12 +14,38 @@
         android:layout_height="wrap_content"
         android:text="@string/hello_world" />
 
-    <Button
-        android:id="@+id/button1"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/testtestclick"
+        android:layout_alignParentLeft="true"
         android:layout_below="@+id/testtestclick"
-        android:text="Button" />
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/test_profile_add_facebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Facebook" />
+
+        <Button
+            android:id="@+id/test_profile_add_twitter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Twitter" />
+
+        <Button
+            android:id="@+id/test_profile_add_pintrest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pintrest" />
+
+        <Button
+            android:id="@+id/test_profile_add_insta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instagram" />
+
+  
+    </LinearLayout>
 
 </RelativeLayout>

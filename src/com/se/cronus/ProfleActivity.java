@@ -100,6 +100,12 @@ public class ProfleActivity extends AbstractCActivity{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	protected void updateAllFeeds() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

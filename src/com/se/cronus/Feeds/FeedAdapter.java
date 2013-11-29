@@ -1,43 +1,29 @@
 package com.se.cronus.Feeds;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import com.se.cronus.MainActivity;
 import com.se.cronus.R;
-import com.se.cronus.R.drawable;
-import com.se.cronus.R.id;
-import com.se.cronus.R.layout;
 import com.se.cronus.items.FeedItem;
-import com.se.cronus.utils.CUtils;
 import com.se.cronus.utils.CronusApp;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.content.DialogInterface;
+import android.os.Message;
 import android.os.Vibrator;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AbsListView;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 /***
  * 
@@ -46,30 +32,27 @@ import android.widget.RelativeLayout;
  */
 public class FeedAdapter extends ArrayAdapter<Feed> {
 
-	ImageView headerLogo[];
-	LinearLayout feeditemlist[];
-	Feed[] values;
-	LinearLayout[] padding;// stuppid that it came to this
-	RelativeLayout[] overlays;
+	List<Feed> values;
+	List<View> converted;
 	Context mContext;
-	private int numValues;
+	private boolean overlay;
 	MainActivity main;
+	private int hight, width;
 
-	public FeedAdapter(Context context, Feed[] feeds, int r) {
+	public FeedAdapter(Context context, List<Feed> feeds, int r) {
 		super(context, r, feeds);
 		this.values = feeds;
-		headerLogo = new ImageView[feeds.length];
-		feeditemlist = new LinearLayout[feeds.length];
-		overlays = new RelativeLayout[feeds.length];
 		mContext = context;
-		numValues = feeds.length;
-		padding = new LinearLayout[numValues];
 		main = (MainActivity) context;
+		converted = new ArrayList<View>();
+		overlay = false;
+		hight = 264;
+		width = -500;
 	}
 
 	public Feed getFeed(int index) {
-		if (index < values.length)
-			return values[index];
+		if (index < values.size())
+			return values.get(index);
 		return null;
 	}
 
@@ -85,284 +68,65 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			convertView.setId(((CronusApp) ((Activity) this.getContext())
 					.getApplication()).feedIDgen++);
 		}
-		final View view = convertView;
-		feeditemlist[position] = (LinearLayout) convertView
+		Feed f = values.get(position);
+		this.fixNulls(position);
+		f.feeditemlist = (LinearLayout) convertView
 				.findViewById(R.id.feeditemlist);
-		feeditemlist[position].setPadding(0, 0, 0, 0);
-		padding[position] = (LinearLayout) convertView
-				.findViewById(R.id.feedpadding);
-
-		overlays[position] = (RelativeLayout) convertView
+		f.headerLogo = (ImageView) convertView.findViewById(R.id.feed_header);
+		f.padding = (LinearLayout) convertView.findViewById(R.id.feedpadding);
+		f.overlays = (RelativeLayout) convertView
 				.findViewById(R.id.feed_overlay);
+		if (!overlay)
+			f.overlays.setVisibility(View.INVISIBLE);
+		else
+			f.overlays.setVisibility(View.VISIBLE);
 
-		headerLogo[position] = (ImageView) convertView
-				.findViewById(R.id.feed_header);
+		System.out.println("overlay hight" + f.overlays.getHeight());
+		f.remove = (ImageView) convertView.findViewById(R.id.feed_nav_delete);
+		f.moveDown = (ImageView) convertView.findViewById(R.id.feed_nav_down);
+		f.moveUp = (ImageView) convertView.findViewById(R.id.feed_nav_up);
+		f.subtitle = (TextView) convertView.findViewById(R.id.feed_subtitle);
 
-		headerLogo[position].setOnClickListener(new OnClickListener() {
+		f.feeditemlist.setPadding(0, 0, 0, 0);
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Vibrator vib = (Vibrator) mContext
-						.getSystemService(Context.VIBRATOR_SERVICE);
-				vib.vibrate(150);
-				for (int i = 0; i < numValues; i++) {
-					if (overlays[i] != null) {
-						((MainActivity) mContext).getActionBar()
-								.getCustomView()
-								.findViewById(R.id.action_search_b)
-								.setVisibility(View.GONE);
-						((MainActivity) mContext).getActionBar()
-								.getCustomView().findViewById(R.id.action_done)
-								.setVisibility(View.VISIBLE);
-						((MainActivity) mContext).getActionBar()
-								.getCustomView().findViewById(R.id.action_done)
-								.setOnClickListener(new OnClickListener() {
-
-									@Override
-									public void onClick(View v) {
-										((MainActivity) mContext)
-												.getActionBar()
-												.getCustomView()
-												.findViewById(
-														R.id.action_search_b)
-												.setVisibility(View.VISIBLE);
-										((MainActivity) mContext)
-												.getActionBar().getCustomView()
-												.findViewById(R.id.action_done)
-												.setVisibility(View.GONE);
-										for (int j = 0; j < numValues; j++) {
-											if (overlays[j] != null)
-												overlays[j]
-														.setVisibility(View.GONE);
-										}
-										// overlays[i].setLayoutParams(new
-										// RelativeLayout.LayoutParams(-1,
-										// padding[i].getHeight() +
-										// headerLogo[i].getHeight()));
-										// recursiveSetClickable(view.findViewById(R.id.feed_body),
-										// false);
-										// recursiveSetClickable(view.findViewById(R.id.feed_head),
-										// false);
-									}
-
-								});
-
-						overlays[i].setVisibility(View.VISIBLE);
-						overlays[i]
-								.setLayoutParams(new RelativeLayout.LayoutParams(
-										-1, padding[i].getHeight()
-												+ headerLogo[i].getHeight()));
-						// recursiveSetClickable(view.findViewById(R.id.feed_body),
-						// false);
-						// recursiveSetClickable(view.findViewById(R.id.feed_head),
-						// false);
-
-					}
-				}
-
-			}
-
-		});
-		// headerLogo[position].setOnTouchListener(new OnTouchListener() {
-		//
-		// @Override
-		// public boolean onTouch(View v, MotionEvent event) {
-		// // TODO Auto-generated method stub
-		//
-		// // if (Math.abs(event.getY() - v.getY()) > 10.0)
-		// ((MainActivity)mContext).findViewById(R.id.feedlist);
-		// ((LinearLayout)v.getParent().getParent()).bringToFront();
-		//
-		// ((LinearLayout) v.getParent().getParent()).setY(event.getY());
-		// return true;
-		// }
-		//
-		// });
-
-		// one posibility
-		// headerLogo[position].setOnClickListener(new OnClickListener() {
-		//
-		// @SuppressLint("NewApi")
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// // RelativeLayout view = new RelativeLayout(mContext);
-		// LinearLayout view = new LinearLayout(mContext);
-		// view.setLayoutParams(new LayoutParams(CUtils
-		// .getScreenWidth(main), CUtils.getScreenHeight(main)));
-		// view.setOrientation(LinearLayout.VERTICAL);
-		//
-		// final Dialog d = new Dialog(mContext);
-		// d.setTitle("Drag to Reorder");
-		// Button back = new Button(mContext);
-		// back.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// d.hide();
-		// }
-		//
-		// });
-		// d.setContentView(view);
-		//
-		// view.addView(back);
-		//
-		// for (int i = 0; i < headerLogo.length; i++) {
-		// if (headerLogo[i] != null) {
-		// Drawable btemp = headerLogo[i].getDrawable().mutate();
-		// // RelativeLayout.LayoutParams ltemp = new
-		// // RelativeLayout.LayoutParams(
-		// // LayoutParams.WRAP_CONTENT,
-		// // LayoutParams.WRAP_CONTENT);
-		// // ltemp.addRule(RelativeLayout.BELOW,
-		// // view.getChildAt(i)
-		// // .getId());
-		// ImageView temp = new ImageView(mContext);
-		// temp.setBackground(btemp);
-		// view.addView(temp);
-		// temp.setLayoutParams(new LinearLayout.LayoutParams(
-		// LayoutParams.WRAP_CONTENT,
-		// LayoutParams.WRAP_CONTENT));
-		// temp.setOnTouchListener(new OnTouchListener() {
-		//
-		// @Override
-		// public boolean onTouch(View v, MotionEvent event) {
-		// // TODO Auto-generated method stub
-		// if (Math.abs(event.getY() - v.getY()) > 10.0)
-		// v.setY(event.getY());
-		// return true;
-		// }
-		//
-		// });
-		// }
-		// }
-		//
-		// d.show();
-		// }
-		//
-		// });
-		// headerLogo[position].setOnDragListener(new OnDragListener() {
-		//
-		// @Override
-		// public boolean onDrag(View v, DragEvent event) {
-		// // TODO Auto-generated method stub
-		// int i;
-		// for (i = 0; i < numValues; i++) {
-		// if (v.getId() == headerLogo[i].getId()) {
-		// // TODO: dragged a header logo, do stuff!!!
-		// ((HorizontalScrollView) v.getParent()).setY(event
-		// .getY());
-		// return true;
-		// }
-		// }
-		// return false;
-		// }
-		//
-		// });
-
-		((HorizontalScrollView) feeditemlist[position].getParent())
-				.setOnTouchListener(new OnTouchListener() {
-
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						// TODO Auto-generated method stub
-
-						return false;
-					}
-				});
-		((HorizontalScrollView) feeditemlist[position].getParent())
-				.getScrollX();
-		// ((HorizontalScrollView)feeditemlist[position].getParent()).on
-
-		Feed f = values[position];
-		switch (f.type) {
-		case CUtils.FACEBOOK_FEED:
-			// Set the image view to Facebook
-			headerLogo[position]
-					.setImageResource(R.drawable.facebook_logo_crop);
-			feeditemlist[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
-			padding[position].setBackgroundColor(CUtils.FACEBOOK_BLUE);
-			overlays[position].setBackgroundColor(CUtils.FACEBOOK_BLUE_CLEAR);
-			break;
-		case CUtils.TWITTER_FEED:
-			headerLogo[position].setImageResource(R.drawable.twitter_logo);
-			feeditemlist[position].setBackgroundColor(CUtils.TWITTER_BLUE);
-			padding[position].setBackgroundColor(CUtils.TWITTER_BLUE);
-			overlays[position].setBackgroundColor(CUtils.TWITTER_BLUE_CLEAR);
-
-			break;
-		case CUtils.INSTA_FEED:
-			headerLogo[position].setImageResource(R.drawable.instagram_logo);
-			feeditemlist[position].setBackgroundColor(CUtils.INSTA_BROWN);
-			padding[position].setBackgroundColor(CUtils.INSTA_BROWN);
-			overlays[position].setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
-
-			break;
-		case CUtils.PINTREST_FEED:
-			headerLogo[position].setImageResource(R.drawable.pinterest_logo);
-			feeditemlist[position].setBackgroundColor(CUtils.PINTREST_RED);
-			padding[position].setBackgroundColor(CUtils.PINTREST_RED);
-			overlays[position].setBackgroundColor(CUtils.PINTREST_RED_CLEAR);
-
-			break;
-		}
-
+		setOnClicks(position);
+		f.setUpView();
 		// checks on checks
-		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type) {
-			updateItems(f.items, f.type, position);
-			f.isInit = true;
-		}
+		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type)
+			updateItems(position);
+		converted.add(convertView);
+
 		return convertView;
 	}
 
 	// This will eventually be fixed to be more object oriented stile and no so
 	// C code looking
-	private void updateItems(ArrayList<FeedItem> items, int type, int position) {
-		// TODO Auto-generated method stub
-		// lots of checks to avoid random acurences trust me all needed.
-		for (int i = 0; i < items.size(); i++) {
-			if (feeditemlist[position].findViewById(items.get(i).getId()) == null) {
-				feeditemlist[position].removeView(items.get(i));
-				if (((ViewGroup) items.get(i).getParent()) != null
-						&& ((ViewGroup) items.get(i).getParent())
-								.findViewById(items.get(i).getId()) != null) {
-					((ViewGroup) items.get(i).getParent()).removeView(items
-							.get(i));
-				}
-				if (feeditemlist[position].getChildCount() < items.size()
-						&& type == items.get(i).type)
-					feeditemlist[position].addView(items.get(i));
-			}
-		}
-	}
 
 	public void updateItems(int feedOrPosition, boolean isfeed) {
 		if (isfeed)
-			for (int i = 0; i < values.length; i++) {
-				if (values[i].type == feedOrPosition) {
-					updateItems(values[i].items, feedOrPosition, i);
+			for (int i = 0; i < values.size(); i++) {
+				if (values.get(i).type == feedOrPosition) {
+					updateItems(i);
 				}
 			}
 		else
-			updateItems(values[feedOrPosition].items,
-					values[feedOrPosition].type, feedOrPosition);
+			updateItems(feedOrPosition);
 	}
 
 	public void resetItems() {
 
-		if (values[0].isSearchMode())
-			for (int i = 0; i < values.length; i++) {
-				if (feeditemlist[i] != null)
-					feeditemlist[i].removeAllViews();// this is null, lets find
-														// out why!
-				updateItems(values[i].getSearch(), values[i].type, i);
+		if (values.get(0).isSearchMode())
+			for (int i = 0; i < values.size(); i++) {
+				if (values.get(i).feeditemlist != null)
+					values.get(i).feeditemlist.removeAllViews();// this is null,
+				// lets find
+				// out why!
+				updateItems(i);
 			}
 		else
-			for (int i = 0; i < values.length; i++) {
-				feeditemlist[i].removeAllViews();
-				updateItems(values[i].items, values[i].type, i);
+			for (int i = 0; i < values.size(); i++) {
+				values.get(i).feeditemlist.removeAllViews();
+				updateItems(i);
 			}
 	}
 
@@ -379,6 +143,285 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 
 		for (int i = 0; i < vcast.getChildCount(); i++) {
 			recursiveSetClickable(v, clickable);
+		}
+	}
+
+	public void setOnClicks(final int position) {
+		values.get(position).moveDown.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				swapViews(position, -1);
+			}
+
+		});
+		values.get(position).moveUp.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				swapViews(position, 1);
+			}
+
+		});
+		values.get(position).remove.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				removeFeed(position);
+			}
+
+		});
+
+		// this is one of those things that works and I cannot explain why
+
+		values.get(position).headerLogo
+				.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						headerOnClick();
+					}
+
+				});
+
+	}
+
+	protected void headerOnClick() {
+		if (!((MainActivity) mContext).searchB) {
+			((MainActivity) mContext).reorderB = true;
+			overlay = true;
+			Vibrator vib = (Vibrator) mContext
+					.getSystemService(Context.VIBRATOR_SERVICE);
+			vib.vibrate(300);
+
+			((MainActivity) mContext).getActionBar().getCustomView()
+					.findViewById(R.id.action_search_b)
+					.setVisibility(View.GONE);
+			((MainActivity) mContext).getActionBar().getCustomView()
+					.findViewById(R.id.action_done).setVisibility(View.VISIBLE);
+			((MainActivity) mContext).getActionBar().getCustomView()
+					.findViewById(R.id.action_done)
+					.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+
+							doneOnClick();
+							overlay = false;
+						}
+
+					});
+			for (int i = 0; i < values.size(); i++) {
+
+				if (values.get(i) != null && converted.get(i) != null) {
+
+					System.out.println("-------" + i + "-------");
+					if (fixNulls(i)) {
+						doneOnClick();
+						headerOnClick();
+						return;
+					}
+					values.get(i).overlays.setVisibility(View.VISIBLE);// HERE
+					values.get(i).overlays
+							.setLayoutParams(new RelativeLayout.LayoutParams(
+									-1, hight));
+					// -1, values.get(i).padding.getHeight()
+					// + values.get(i).headerLogo
+					// .getHeight()));
+
+					values.get(i).setClickable(false);
+					if (i == 3
+							&& values.get(3).overlays.getVisibility() != View.VISIBLE) {
+						doneOnClick();
+						values.get(3).headerLogo.performClick();
+						return;
+					}
+
+					System.out.println("-------" + i + "-------");
+
+				}
+			}
+		}
+
+	}
+
+	private boolean fixNulls(int i) {
+		if (i < converted.size() && i < values.size()) {
+			// System.out.println("before check");
+			// System.out.println("feeditemlist its null:"
+			// + Boolean.toString(values.get(i).feeditemlist == null));
+			// System.out.println("headerLogo its null:"
+			// + Boolean.toString(values.get(i).headerLogo == null));
+			// System.out.println("padding its null:"
+			// + Boolean.toString(values.get(i).padding == null));
+			// System.out.println("overlays its null:"
+			// + Boolean.toString(values.get(i).overlays == null));
+			// System.out.println("remove its null:"
+			// + Boolean.toString(values.get(i).remove == null));
+			// System.out.println("moveDown its null:"
+			// + Boolean.toString(values.get(i).moveDown == null));
+			// System.out.println("moveUp its null:"
+			// + Boolean.toString(values.get(i).moveUp == null));
+			// System.out.println("converted[" + i + "] its null:"
+			// + Boolean.toString(converted.get(i) == null));
+			boolean before = false;
+			boolean after = false;
+			if (converted.get(i) == null) {
+				// Inflate new View
+				// inflate the layout
+				before = true;
+				LayoutInflater inflater = ((Activity) mContext)
+						.getLayoutInflater();
+				converted.add(i, inflater.inflate(R.layout.feed, null));
+				converted.get(i).setPadding(0, 1, 0, 1);
+				converted.get(i).setId(
+						((CronusApp) ((Activity) this.getContext())
+								.getApplication()).feedIDgen++);
+			}
+
+			if (values.get(i).feeditemlist == null) {
+				values.get(i).feeditemlist = (LinearLayout) converted.get(i)
+						.findViewById(R.id.feeditemlist);
+
+			}
+			if (values.get(i).headerLogo == null) {
+				values.get(i).headerLogo = (ImageView) converted.get(i)
+						.findViewById(R.id.feed_header);
+
+			}
+			if (values.get(i).padding == null) {
+				values.get(i).padding = (LinearLayout) converted.get(i)
+						.findViewById(R.id.feedpadding);
+
+			}
+			if (values.get(i).overlays == null) {
+				values.get(i).overlays = (RelativeLayout) converted.get(i)
+						.findViewById(R.id.feed_overlay);
+			}
+			if (values.get(i).remove == null) {
+				values.get(i).remove = (ImageView) converted.get(i)
+						.findViewById(R.id.feed_nav_delete);
+			}
+			if (values.get(i).moveDown == null) {
+				values.get(i).moveDown = (ImageView) converted.get(i)
+						.findViewById(R.id.feed_nav_down);
+			}
+			if (values.get(i).moveUp == null) {
+				values.get(i).moveUp = (ImageView) converted.get(i)
+						.findViewById(R.id.feed_nav_up);
+			}
+			if (values.get(i).subtitle == null) {
+				values.get(i).subtitle = (TextView) converted.get(i)
+						.findViewById(R.id.feed_subtitle);
+			}
+			if (converted.get(i) != null) {
+				after = true;
+			}
+			// System.out.println("after check");
+			// System.out.println("feeditemlist its null:"
+			// + Boolean.toString(values.get(i).feeditemlist == null));
+			// System.out.println("headerLogo its null:"
+			// + Boolean.toString(values.get(i).headerLogo == null));
+			// System.out.println("padding its null:"
+			// + Boolean.toString(values.get(i).padding == null));
+			// System.out.println("overlays its null:"
+			// + Boolean.toString(values.get(i).overlays == null));
+			// System.out.println("remove its null:"
+			// + Boolean.toString(values.get(i).remove == null));
+			// System.out.println("moveDown its null:"
+			// + Boolean.toString(values.get(i).moveDown == null));
+			// System.out.println("moveUp its null:"
+			// + Boolean.toString(values.get(i).moveUp == null));
+			return (after && before);
+		}
+		return false;
+	}
+
+	protected void doneOnClick() {
+		((MainActivity) mContext).reorderB = false;
+		((MainActivity) mContext).getActionBar().getCustomView()
+				.findViewById(R.id.action_search_b).setVisibility(View.VISIBLE);
+		((MainActivity) mContext).getActionBar().getCustomView()
+				.findViewById(R.id.action_done).setVisibility(View.GONE);
+		for (int i = 0; i < values.size(); i++) {
+			values.get(i).overlays.setVisibility(View.INVISIBLE);
+			values.get(i).setClickable(true);
+		}
+	}
+
+	public void updateItems(final int p) {
+		// lots of checks to avoid random acurences trust me all needed.
+		int i = 0;
+		// first remove everything
+		fixNulls(p);
+		values.get(p).feeditemlist.removeAllViews();
+
+		ArrayList<FeedItem> toadd = null;
+		if (values.get(p).isSearchMode())
+			toadd = values.get(p).sItems;
+		else
+			toadd = values.get(p).items;
+
+		// then re-add them
+		for (i = 0; i < toadd.size(); i++) {
+			ViewGroup parent = (ViewGroup) toadd.get(i).getParent();
+			if (parent != null)
+				parent.removeView(toadd.get(i));
+			values.get(p).feeditemlist.addView(toadd.get(i));
+		}
+
+	}
+
+	public void swapViews(int position, int move) {
+		if (position == 0 && move == 1)
+			return;
+		if (position == values.size() && move == -1)
+			return;
+		Feed temp = this.getItem(position);
+		this.remove(temp);
+		this.insert(temp, position - move);
+		for (int i = 0; i < values.size(); i++) {
+			this.updateItems(i);
+		}
+	}
+
+	public void removeFeed(final int position) {
+		final AlertDialog alert = new AlertDialog.Builder(this.getContext())
+				.create();
+		alert.setTitle("Remove Feed");
+		alert.setMessage("Remove the Feed \""
+				+ this.getItem(position).getFeedTitle() + "\" forever?");
+
+		alert.setButton(AlertDialog.BUTTON_POSITIVE, "YES Remove It!",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						removeFeed(getItem(position));
+
+					}
+				});
+		alert.setButton(AlertDialog.BUTTON_NEGATIVE, "NOWAY I'll Keep It!",
+				new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						alert.hide();
+					}
+				});
+		alert.show();
+
+	}
+
+	private void removeFeed(Feed toRemove) {
+		this.remove(toRemove);
+		if (this.getCount() == 0) {
+			((MainActivity) this.getContext()).getActionBar().getCustomView()
+					.findViewById(R.id.action_done).performClick();
 		}
 	}
 }

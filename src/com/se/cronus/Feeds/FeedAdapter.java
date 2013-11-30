@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +37,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 	List<View> converted;
 	Context mContext;
 	private boolean overlay;
+	private int h = 200;
 	MainActivity main;
 	private int hight, width;
 
@@ -67,6 +69,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			convertView.setPadding(0, 1, 0, 1);
 			convertView.setId(((CronusApp) ((Activity) this.getContext())
 					.getApplication()).feedIDgen++);
+//			((LinearLayout)convertView.findViewById(R.id.feed_body)).setLayoutParams(new RelativeLayout.LayoutParams(-1, h));
 		}
 		Feed f = values.get(position);
 		this.fixNulls(position);
@@ -86,7 +89,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		f.moveDown = (ImageView) convertView.findViewById(R.id.feed_nav_down);
 		f.moveUp = (ImageView) convertView.findViewById(R.id.feed_nav_up);
 		f.subtitle = (TextView) convertView.findViewById(R.id.feed_subtitle);
-
+		
 		f.feeditemlist.setPadding(0, 0, 0, 0);
 
 		setOnClicks(position);

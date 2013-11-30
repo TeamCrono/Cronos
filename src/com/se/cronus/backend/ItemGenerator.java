@@ -46,7 +46,13 @@ public class ItemGenerator implements Runnable{
 	}
 	
 	private synchronized void post(final FeedItem gened) {
-		// TODO Auto-generated method stub
+//		while(thisF.feeditemlist == null){
+//			try {
+//				Thread.sleep(333);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 		thisF.feeditemlist.post(new Runnable(){
 
 			@Override

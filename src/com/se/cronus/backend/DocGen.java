@@ -50,7 +50,7 @@ public class DocGen {
 		
 		newDoc.setImg(mContext.getResources().getDrawable(R.drawable.deadpool_profile_pic_test));
 		newDoc.setProfPic(mContext.getResources().getDrawable(R.drawable.temp_cronos_logo));
-		newDoc.setStatus("Lets just pretend this works for now!"+ran.nextInt(100));
+		newDoc.setStatus("test"+ran.nextInt(100));
 		newDoc.setType(t);
 		ArrayList<String> url = new ArrayList<String>();
 		url.add("https://www.google.com");

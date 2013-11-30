@@ -161,16 +161,13 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	public void updateAllFeeds() {
 		System.out.println("updateAllFeeds");
 		for(int i = 0; i < feedAdapt.getCount(); i++){
-			
 			Thread genthread = new Thread(feedAdapt.getItem(i).itemgen);
 			feedAdapt.getItem(i).itemgen.numItemsRequested(5);
 			genthread.run();
 		}
 	}
 
-	public void updateFeedAt(int index) {
-		// TODO
-	}
+
 
 	private void setFeedArray() {
 		// TODO create A feed list consisting of all of users current feeds;
@@ -310,6 +307,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		case R.id.test_profile_add_facebook:
 			newf = new Feed(this, CUtils.FACEBOOK_FEED);
 			feedAdapt.add(newf);
+			
 
 			break;
 		case R.id.test_profile_add_twitter:
@@ -325,7 +323,8 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 			feedAdapt.add(newf);
 			break;
 		}
-
+		this.viewMain();
+		this.updateAllFeeds();
 	}
 
 }

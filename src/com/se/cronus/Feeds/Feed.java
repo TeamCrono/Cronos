@@ -8,13 +8,7 @@ import com.se.cronus.backend.ItemGenerator;
 import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
 import com.se.cronus.utils.CronusApp;
-
 import android.content.Context;
-import android.os.Vibrator;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -105,7 +99,8 @@ public class Feed extends RelativeLayout {
 		if (contains(item))
 			return false;
 		else
-			return items.add(item);
+			items.add(0,item);
+		return true;
 	}
 
 	private boolean contains(FeedItem item) {

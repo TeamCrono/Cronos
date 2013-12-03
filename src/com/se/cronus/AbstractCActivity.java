@@ -425,6 +425,7 @@ OnClickListener {
 			super.onBackPressed();
 		else
 			viewMain();
+		
 	}
 	
 	protected abstract void onSearchClick();

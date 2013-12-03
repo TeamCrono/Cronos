@@ -167,7 +167,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		}
 	}
 
-
+	
 
 	private void setFeedArray() {
 		// TODO create A feed list consisting of all of users current feeds;
@@ -210,6 +210,8 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	}
 
 	protected void onSearchClick() {
+		if(feedAdapt.getCount() == 0)
+			return;
 		// enable search
 		if (searchTextE.getVisibility() == View.GONE && !searchB) {
 			searchTextV.setText("");
@@ -324,7 +326,14 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 			break;
 		}
 		this.viewMain();
-		this.updateAllFeeds();
+//		this.updateAllFeeds();  //need to do this somewhre 
+	}
+	@Override
+	public void onBackPressed(){		
+		if (searchTextE.getVisibility() == View.VISIBLE && searchB){
+			this.onSearchClick();
+		}else
+			super.onBackPressed();
 	}
 
 }

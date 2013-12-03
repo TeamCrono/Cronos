@@ -10,8 +10,8 @@ import android.widget.RelativeLayout;
 
 public abstract class ItemFragmentView extends /*View*/ RelativeLayout {
 	
-	private ItemDoc doc;
-	private int type;
+	protected ItemDoc doc;
+	protected int type;
 	
 	protected ItemFragmentCntrl clicklistener;
 	

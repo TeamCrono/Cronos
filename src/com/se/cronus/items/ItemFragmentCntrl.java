@@ -9,11 +9,11 @@ public abstract class ItemFragmentCntrl  implements OnClickListener{
 
 	public abstract boolean onLikeClick();
 	public abstract boolean onCommentClick();
+	private ItemFragmentView parent;
 	
-	
-	public ItemFragmentCntrl() {
+	public ItemFragmentCntrl( ItemFragmentView parent) {
 		// TODO Auto-generated constructor stub
-		
+		this.parent = parent;
 		
 	}
 

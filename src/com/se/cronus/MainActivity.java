@@ -1,5 +1,8 @@
 package com.se.cronus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.ActionBar;
 import android.app.Service;
 import android.content.Intent;
@@ -35,6 +38,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu.OnOpenedListener;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.se.cronus.Feeds.Feed;
 import com.se.cronus.Feeds.FeedAdapter;
+import com.se.cronus.backend.ItemGenerator;
 import com.se.cronus.items.ItemFragmentView;
 import com.se.cronus.items.TestFragView;
 import com.se.cronus.utils.CUtils;
@@ -68,9 +72,10 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	FrameLayout parent;
 	boolean ifTrue;
 	ListView FeedList;
-	FeedAdapter feedAdapt;
-	Feed[] FeedArray;
-	boolean searchB;
+	public FeedAdapter feedAdapt;
+	List<Feed> FeedArray;
+	public boolean searchB;
+
 	// Keyboard stuff
 	InputMethodManager imm;
 
@@ -81,6 +86,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(com.se.cronus.R.layout.activity_main);
 		searchB = false;
+		reorderB = false;
 		/* THIS SECTION DEALS WITH FEED ADAPTERS AND STUFFS */
 
 		// general utilities for app
@@ -101,6 +107,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		parent = (FrameLayout) findViewById(R.id.fragment_container);
 
 		this.parent.setBackgroundColor(Color.rgb(62, 83, 93));
+
 		/* THIS SECTION IS FOR INIT AND DESIGN STUFF */
 	}
 
@@ -128,30 +135,39 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 				final int lastItem = firstVisibleItem + visibleItemCount;
 				if (lastItem == totalItemCount) {
 					// you have reached end of list, load more data
-					updateAllFeeds();
+//					updateAllFeeds();
 				}
-				if(firstVisibleItem == 0){
+				if (firstVisibleItem == 0) {
 					// you have reached beginning of list, load more data
-					updateAllFeeds();
+//					updateAllFeeds();
 				}
 			}
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// blank, not using this
-				
+				if(this.SCROLL_STATE_TOUCH_SCROLL == scrollState){
+//					Feed topViewFeed = null; //TODO: make a feed that is just a spinner
+//					feedAdapt.add(topViewFeed);//find a way to remove it
+					//view.getChildAt(0);
+					
+					return;
+				}
 			}
 		});
-		
+
 	}
 
 	public void updateAllFeeds() {
-		// TODO Auto-generated method stub
-		System.out.print("updateAllFeeds");
+		System.out.println("updateAllFeeds");
+		for(int i = 0; i < feedAdapt.getCount(); i++){
+			Thread genthread = new Thread(feedAdapt.getItem(i).itemgen);
+			feedAdapt.getItem(i).itemgen.numItemsRequested(5);
+			genthread.run();
+		}
 	}
-	public void updateFeedAt(int index){
-		//TODO
-	}
+
+	
 
 	private void setFeedArray() {
 		// TODO create A feed list consisting of all of users current feeds;
@@ -163,10 +179,8 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	 * 
 	 */
 	private void setTestingFeedArray() {
-		FeedArray = new Feed[] { new Feed(this, CUtils.FACEBOOK_FEED),
-				new Feed(this, CUtils.INSTA_FEED),
-				new Feed(this, CUtils.PINTREST_FEED),
-				new Feed(this, CUtils.TWITTER_FEED) };
+		FeedArray = new ArrayList<Feed>();
+
 	}
 
 	// this is the back end methods for search bar that is yet to be
@@ -196,6 +210,8 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	}
 
 	protected void onSearchClick() {
+		if(feedAdapt.getCount() == 0)
+			return;
 		// enable search
 		if (searchTextE.getVisibility() == View.GONE && !searchB) {
 			searchTextV.setText("");
@@ -205,6 +221,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 			searchTextE.requestFocus();
 			searchTextE.setSelected(true);
 			imm.showSoftInput(searchTextE, 0);
+			searchB = !searchB;
 			return;
 		}
 		// clear search
@@ -218,7 +235,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 			return;
 		}
 		// search
-		if (searchTextE.getVisibility() == View.VISIBLE && !searchB) {
+		if (searchTextE.getVisibility() == View.VISIBLE && searchB) {
 			imm.hideSoftInputFromWindow(searchTextE.getWindowToken(), 0);
 			String toSearch = searchTextE.getText().toString().trim();
 			String title;
@@ -241,7 +258,14 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 				// TODO: do search
 				onSearch(toSearch);
 				viewMain();
-				searchB = !searchB;
+
+				return;
+			} else {
+				searchTextV.setText("Cronus");
+				// searchTextV.setVisibility(View.GONE);
+				searchTextE.setText("");
+				searchTextE.setVisibility(View.GONE);
+				searchB = false;
 				return;
 			}
 
@@ -280,6 +304,36 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	@Override
 	public void onClick(View v) {
 		super.onClick(v);
+		Feed newf = null;
+		switch (v.getId()) {
+		case R.id.test_profile_add_facebook:
+			newf = new Feed(this, CUtils.FACEBOOK_FEED);
+			feedAdapt.add(newf);
+			
+
+			break;
+		case R.id.test_profile_add_twitter:
+			newf = new Feed(this, CUtils.TWITTER_FEED);
+			feedAdapt.add(newf);
+			break;
+		case R.id.test_profile_add_pintrest:
+			newf = new Feed(this, CUtils.PINTREST_FEED);
+			feedAdapt.add(newf);
+			break;
+		case R.id.test_profile_add_insta:
+			newf = new Feed(this, CUtils.INSTA_FEED);
+			feedAdapt.add(newf);
+			break;
+		}
+		this.viewMain();
+//		this.updateAllFeeds();  //need to do this somewhre 
+	}
+	@Override
+	public void onBackPressed(){		
+		if (searchTextE.getVisibility() == View.VISIBLE && searchB){
+			this.onSearchClick();
+		}else
+			super.onBackPressed();
 	}
 
 }

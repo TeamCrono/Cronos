@@ -10,6 +10,7 @@ import com.se.cronus.items.TestFragView;
 import com.se.cronus.utils.CUtils;
 import com.se.cronus.utils.CronusApp;
 
+import android.R;
 import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
@@ -72,8 +73,11 @@ OnClickListener {
 	protected ActionBar act;
 	protected ImageView item;
 	protected ImageView search;
+	protected ImageView refresh;
 	protected EditText searchTextE;
 	protected TextView searchTextV;
+	
+	public boolean reorderB;
 
 	FragmentTransaction ft;
 
@@ -83,7 +87,7 @@ OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_abstract_c);
+		setContentView(com.se.cronus.R.layout.activity_abstract_c);
 
 		/* THIS SECTION DEALS WITH FRAGMENT HANDLING */// /however it doesnt
 														// work right now.
@@ -109,6 +113,7 @@ OnClickListener {
 		// extract soon
 		item.setOnClickListener(this);
 		search.setOnClickListener(this);
+		refresh.setOnClickListener(this);
 		searchTextV.setClickable(true);
 		searchTextV.setOnKeyListener(new OnKeyListener() {
 			@Override
@@ -174,8 +179,8 @@ OnClickListener {
 		// curAttatched.attachToActivity(this, //attatched with onclick
 		// SlidingMenu.SLIDING_CONTENT);
 		curAttatched.setMenu(v);
-		curAttatched
-				.setBehindOffsetRes(com.se.cronus.R.dimen.slidingmenu_offset);
+//		curAttatched
+//				.setBehindOffsetRes(com.se.cronus.R.dimen.slidingmenu_offset);
 
 //		curAttatched.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
 		curAttatched.setOnOpenedListener(new OnOpenedListener() {
@@ -187,6 +192,7 @@ OnClickListener {
 			}
 
 		});
+		
 		curAttatched.setOnClosedListener(new OnClosedListener() {
 
 			@Override
@@ -235,7 +241,7 @@ OnClickListener {
 
 		});
 
-		profile.findViewById(R.id.testtestclick).setOnClickListener(
+		profile.findViewById(com.se.cronus.R.id.testtestclick).setOnClickListener(
 				new OnClickListener() {
 
 					@Override
@@ -245,6 +251,11 @@ OnClickListener {
 					}
 
 				});
+		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_facebook).setOnClickListener(this);
+		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_twitter).setOnClickListener(this);
+		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_pintrest).setOnClickListener(this);
+		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_insta).setOnClickListener(this);
+		
 	}
 
 	// sloppy floppy, but It'll work dawg
@@ -255,7 +266,7 @@ OnClickListener {
 
 	protected void setUpActionBar() {
 		ImageView icon = new ImageView(this);
-		icon.setBackgroundResource(R.drawable.temp_cronos_logo);
+		icon.setBackgroundResource(com.se.cronus.R.drawable.temp_cronos_logo);
 		act = this.getActionBar();
 		act.setBackgroundDrawable(new ColorDrawable(CUtils.CRONUS_GREEN_DARK));
 		act.setIcon(com.se.cronus.R.drawable.temp_cronos_logo);
@@ -266,6 +277,7 @@ OnClickListener {
 		((ViewGroup)act.getCustomView().getParent()).addView(icon);
 		// extra icons
 		search = (ImageView) findViewById(com.se.cronus.R.id.action_search_b);
+		refresh = (ImageView) findViewById(com.se.cronus.R.id.action_refresh);
 		searchTextE = (EditText) findViewById(com.se.cronus.R.id.action_search_et);
 		searchTextV = (TextView) findViewById(com.se.cronus.R.id.action_search_tv);
 		item = (ImageView) findViewById(com.se.cronus.R.id.action_item);
@@ -277,7 +289,7 @@ OnClickListener {
 		searchTextV.setTextColor(Color.WHITE);
 		searchTextV.setTextSize(15);
 		
-		ImageView logo = (ImageView) findViewById(R.id.temp_cronos_logo);
+		ImageView logo = (ImageView) findViewById(com.se.cronus.R.id.temp_cronos_logo);
 		logo.setLayoutParams(new RelativeLayout.LayoutParams(act.getHeight(),act.getHeight()));
 
 	}
@@ -333,17 +345,22 @@ OnClickListener {
 				return;
 			}
 			return;
-		case R.id.action_search_b:
+		case com.se.cronus.R.id.action_search_b:
 			onSearchClick();
 			return;
-		case R.id.action_search_tv:
+		case com.se.cronus.R.id.action_search_tv:
 			onSearchClick();
+			return;
+		case com.se.cronus.R.id.action_refresh:
+			updateAllFeeds();
 			return;
 		}
 
 	}
 
 	
+	protected abstract void updateAllFeeds();
+
 	// this section is to help with save state
 	@Override
 	protected void onPause() {
@@ -400,10 +417,15 @@ OnClickListener {
 	@Override
 	public void onBackPressed() {
 		// TODO Auto-generated method stub
+		if(reorderB == true){
+			act.getCustomView().findViewById(com.se.cronus.R.id.action_done).performClick();
+			return;
+		}
 		if (CUR == MAIN)
 			super.onBackPressed();
 		else
 			viewMain();
+		
 	}
 	
 	protected abstract void onSearchClick();

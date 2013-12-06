@@ -21,7 +21,7 @@ public abstract class ItemFragmentView extends /*View*/ RelativeLayout {
 	public ItemFragmentView(ItemDoc d, Context c){
 		super(c);
 		this.setType(d.getType());
-		
+		doc = d;
 		onCreate();
 		setLayoutParams();
 		

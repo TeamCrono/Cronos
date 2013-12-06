@@ -25,7 +25,8 @@ import com.se.cronus.utils.CUtils;
  *
  */
 public class InstagramItemFragmentView extends ItemFragmentView{
-
+	
+	private ItemDoc doc;
 	private ScrollView mainScroll;
 	private LinearLayout content;
 	private LinearLayout titleBar;
@@ -58,7 +59,11 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		likesText.setText("#" + doc.getNumLikes() + "likes");
 		description.setText(doc.getStatus());
 		return this.getDoc();
-		
+
+	public InstagramItemFragmentView(ItemDoc d, Context c) {
+		super(d, c);
+		setDoc(d);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -76,6 +81,7 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		profilePic = new ImageView(this.getContext());
 		likeButton = new ImageView(this.getContext());
 		commentButton = new ImageView(this.getContext());
+		// TODO: create comment button, like button
 	}
 
 	@Override

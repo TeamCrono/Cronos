@@ -1,7 +1,6 @@
 package com.se.cronus.items.twitter;
 
 import java.util.ArrayList;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
 import com.se.cronus.MainActivity;
 import com.se.cronus.items.ItemDoc;
 import com.se.cronus.items.ItemFragmentView;
@@ -77,8 +75,6 @@ public class TwitterView extends ItemFragmentView {
 			content.addView(tempComment);
 		}
 		
-		
-		
 		return this.getDoc();
 	}
 
@@ -129,7 +125,7 @@ public class TwitterView extends ItemFragmentView {
 		contentScroll.addView(content);
 		
 		//now dealing with content
-		imageOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,CUtils.getScreenHeight((MainActivity) this.getContext())/2));
+		imageOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, CUtils.getScreenHeight((MainActivity) this.getContext())/2));
 		imageOverlay.setVisibility(View.INVISIBLE);
 		tweetLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		tweetLayout.setOrientation(LinearLayout.HORIZONTAL);

@@ -40,8 +40,14 @@ public abstract class ItemFragmentView extends /*View*/ RelativeLayout {
 	
 	protected abstract void onCreate();
 	protected abstract void setLayoutParams();
-	public abstract boolean setDoc(ItemDoc d);
-	public abstract ItemDoc getDoc();
+	
+	public boolean setDoc(ItemDoc d) {
+		doc = d;
+		return true;
+	}
+	public ItemDoc getDoc() {
+		return doc;
+	}
 
 	public abstract void destroy();
 }

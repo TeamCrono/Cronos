@@ -3,6 +3,7 @@ package com.se.cronus.items;
 import com.se.cronus.AbstractCActivity;
 import com.se.cronus.R;
 import com.se.cronus.R.drawable;
+import com.se.cronus.items.twitter.TwitterView;
 import com.se.cronus.utils.CUtils;
 
 import android.annotation.SuppressLint;
@@ -114,7 +115,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 			view = null;
 			break;
 		case CUtils.TWITTER_FEED:
-			view = null;
+			view = new TwitterView(doc2, this.getContext());
 			break;
 		case CUtils.INSTA_FEED:
 			view = null;

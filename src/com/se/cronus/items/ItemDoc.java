@@ -4,12 +4,16 @@ import java.util.ArrayList;
 
 import com.se.cronus.utils.CUtils;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
+
 /***
  * DOCUMENT FOR POPULATING VIEWS IN THE ITEM FRAGMENT
+ * 
  * @author dj
- *
+ * 
  */
 public class ItemDoc {
 
@@ -24,18 +28,18 @@ public class ItemDoc {
 	private ArrayList<String> URL;
 	private int type;
 
-	
-	
 	@Override
 	public boolean equals(Object o) {
 		// TODO Auto-generated method stub
 		ItemDoc Io = (ItemDoc) o;
-		//if someone posts a statsus saying the same thing we be like, not in this house!
-		if(Io.Author.equals(Author) && Io.getStatus().equals(status) && Io.getType() == type){
+		// if someone posts a statsus saying the same thing we be like, not in
+		// this house!
+		if (Io.Author.equals(Author) && Io.getStatus().equals(status)
+				&& Io.getType() == type) {
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	public ItemDoc() {
@@ -45,9 +49,9 @@ public class ItemDoc {
 		Author = new String();
 		status = new String();
 		whoLiked = new ArrayList<String>();
-		whoShared =  new ArrayList<String>();
-		Comments =  new ArrayList<Pair<String,String>>();
-		URL =  new ArrayList<String>();
+		whoShared = new ArrayList<String>();
+		Comments = new ArrayList<Pair<String, String>>();
+		URL = new ArrayList<String>();
 		type = CUtils.TEST_FEED;
 
 	}
@@ -73,7 +77,7 @@ public class ItemDoc {
 	public Drawable getImg() {
 		if (img != null)
 			return img;
-		return profPic;
+		return this.getProfPic();
 	}
 
 	public void setImg(Drawable img) {
@@ -97,22 +101,22 @@ public class ItemDoc {
 		this.whoLiked = whoLiked;
 	}
 
-	public void addWhoLiked(String who){
+	public void addWhoLiked(String who) {
 		this.whoLiked.add(who);
 	}
-	
+
 	public ArrayList<String> getWhoShared() {
 		return whoShared;
 	}
-	
+
 	public void setWhoShared(ArrayList<String> whoShared) {
 		this.whoShared = whoShared;
 	}
-	
-	public void addWhoShared(String who){
+
+	public void addWhoShared(String who) {
 		this.whoShared.add(who);
 	}
-	
+
 	public ArrayList<Pair<String, String>> getComments() {
 		return Comments;
 	}
@@ -120,11 +124,11 @@ public class ItemDoc {
 	public void setComments(ArrayList<Pair<String, String>> comments) {
 		Comments = comments;
 	}
-	
-	public void addComment(String usr, String comment){
-		Comments.add(new Pair<String, String>(usr,comment));
+
+	public void addComment(String usr, String comment) {
+		Comments.add(new Pair<String, String>(usr, comment));
 	}
-	
+
 	public String getAuthor() {
 		return Author;
 	}
@@ -134,7 +138,25 @@ public class ItemDoc {
 	}
 
 	public Drawable getProfPic() {
-		return profPic;
+		if (profPic != null)
+			return profPic;
+		else
+			switch (type) {
+			case CUtils.FACEBOOK_FEED:
+				return new ColorDrawable(CUtils.FACEBOOK_BLUE);
+			case CUtils.TWITTER_FEED:
+				return new ColorDrawable(CUtils.TWITTER_BLUE);
+
+			case CUtils.PINTREST_FEED:
+				return new ColorDrawable(CUtils.PINTREST_RED);
+
+			case CUtils.INSTA_FEED:
+				return new ColorDrawable(CUtils.INSTA_BROWN);
+			case CUtils.TEST_FEED:
+				return new ColorDrawable(CUtils.CRONUS_GREEN_LIGHT);
+
+			}
+		return new ColorDrawable(Color.WHITE);
 	}
 
 	public void setProfPic(Drawable profPic) {

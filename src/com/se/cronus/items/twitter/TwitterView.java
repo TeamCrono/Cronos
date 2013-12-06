@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Pair;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -35,6 +37,26 @@ public class TwitterView extends ItemFragmentView {
 		super(d, c);
 		setOnClicks();
 		pullContent();
+		setStyles();
+	}
+
+	private void setStyles() {
+		this.setBackgroundColor(CUtils.TWITTER_BLUE);
+		
+//		sharedImg = new ImageView(this.getContext());
+//		contentScroll = new ScrollView(this.getContext());
+//		content.setBackgroundColor(Color.TRANSPARENT);
+		imageOverlay.setBackgroundColor(Color.CYAN);
+		tweetLayout.setBackgroundColor(Color.YELLOW);
+		
+//		author = new TextView(this.getContext());
+//		tweet = new TextView(this.getContext());
+//		comments = new ArrayList<LinearLayout>();
+//		profilePic = new ImageView(this.getContext());
+//		replyButton = new ImageView(this.getContext());
+//		retweetButton = new ImageView(this.getContext());
+//		favoriteButton = new ImageView(this.getContext());
+//		
 	}
 
 	@SuppressLint("NewApi")
@@ -55,6 +77,8 @@ public class TwitterView extends ItemFragmentView {
 			content.addView(tempComment);
 		}
 		
+		
+		
 		return this.getDoc();
 	}
 
@@ -72,6 +96,7 @@ public class TwitterView extends ItemFragmentView {
 		content = new LinearLayout(this.getContext());
 		imageOverlay = new LinearLayout(this.getContext());
 		tweetLayout = new LinearLayout(this.getContext());
+		author = new TextView(this.getContext());
 		tweet = new TextView(this.getContext());
 		comments = new ArrayList<LinearLayout>();
 		profilePic = new ImageView(this.getContext());
@@ -98,12 +123,13 @@ public class TwitterView extends ItemFragmentView {
 		this.addView(sharedImg);
 		this.addView(contentScroll);
 		
-		content.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+		content.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		content.setOrientation(LinearLayout.VERTICAL);
 		contentScroll.addView(content);
 		
 		//now dealing with content
-		imageOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, sharedImg.getHeight()));
+		imageOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,CUtils.getScreenHeight((MainActivity) this.getContext())/2));
+		imageOverlay.setVisibility(View.INVISIBLE);
 		tweetLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		tweetLayout.setOrientation(LinearLayout.HORIZONTAL);
 		content.addView(imageOverlay);
@@ -112,9 +138,10 @@ public class TwitterView extends ItemFragmentView {
 		//tweetLayout stuff
 		LinearLayout tweetInner = new LinearLayout(this.getContext());
 		tweetInner.setOrientation(LinearLayout.VERTICAL);
+		tweetInner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT));
 		LinearLayout innerButtons = new LinearLayout(this.getContext());
 		innerButtons.setOrientation(LinearLayout.HORIZONTAL);
-		profilePic.setLayoutParams(new LayoutParams(tweetLayout.getHeight(), LayoutParams.MATCH_PARENT));
+		profilePic.setLayoutParams(new LayoutParams(100, 100));//TODO, acutally crop this photo
 		tweetLayout.addView(profilePic);
 		tweetLayout.addView(tweetInner);
 		tweetInner.addView(author);

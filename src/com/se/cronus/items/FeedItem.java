@@ -135,8 +135,6 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 
 		this.addView(bg);
 		this.addView(tvparent);
-		
-			
 
 		LayoutParams bgP = new LayoutParams(W, H);
 		bgP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -212,8 +210,8 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 			break;
 		}
 		if (view != null) {
-			AbstractCActivity main = (AbstractCActivity) this.getContext()
-					.getApplicationContext();
+			AbstractCActivity main = (AbstractCActivity) this.getContext();
+
 			main.changeItemFragment(view);
 		} else {
 			AbstractCActivity main = (AbstractCActivity) this.getContext();

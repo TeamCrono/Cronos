@@ -220,11 +220,14 @@ public class CUtils {
 
 	}
 	
-	public int genCronusID(Context con){
+	public static int genCronusID(Context con){
 		CronusApp appthis = ((CronusApp)((MainActivity)con).getApplication());
 		appthis.feedIDgen++;
 		return appthis.feedIDgen;
 		
+	}
+	public static int getActBarH(Context con){
+		return ((MainActivity)con).getActionBar().getHeight();
 	}
 	
 	

@@ -27,7 +27,7 @@ public class TwitterView extends ItemFragmentView {
 	private LinearLayout tweetLayout;
 	private TextView tweet;
 	private TextView author;
-	private ArrayList<LinearLayout> comments;
+	//private ArrayList<LinearLayout> comments;
 	private ImageView profilePic;
 	public ImageView replyButton;
 	public ImageView retweetButton;
@@ -98,11 +98,12 @@ public class TwitterView extends ItemFragmentView {
 		tweetLayout = new LinearLayout(this.getContext());
 		author = new TextView(this.getContext());
 		tweet = new TextView(this.getContext());
-		comments = new ArrayList<LinearLayout>();
+		//comments = new ArrayList<LinearLayout>();
 		profilePic = new ImageView(this.getContext());
 		replyButton = new ImageView(this.getContext());
 		retweetButton = new ImageView(this.getContext());
 		favoriteButton = new ImageView(this.getContext());
+		author = new TextView(this.getContext());
 	}
 
 	@Override

@@ -138,9 +138,10 @@ public class TwitterView extends ItemFragmentView {
 		//tweetLayout stuff
 		LinearLayout tweetInner = new LinearLayout(this.getContext());
 		tweetInner.setOrientation(LinearLayout.VERTICAL);
+		tweetInner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT));
 		LinearLayout innerButtons = new LinearLayout(this.getContext());
 		innerButtons.setOrientation(LinearLayout.HORIZONTAL);
-		profilePic.setLayoutParams(new LayoutParams(tweetLayout.getHeight(), LayoutParams.MATCH_PARENT));
+		profilePic.setLayoutParams(new LayoutParams(100, 100));//TODO, acutally crop this photo
 		tweetLayout.addView(profilePic);
 		tweetLayout.addView(tweetInner);
 		tweetInner.addView(author);

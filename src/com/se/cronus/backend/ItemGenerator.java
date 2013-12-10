@@ -58,6 +58,7 @@ public class ItemGenerator implements Runnable{
 //			}
 //		}
 		
+		
 		thisF.feeditemlist.post(new Runnable(){
 
 			@Override

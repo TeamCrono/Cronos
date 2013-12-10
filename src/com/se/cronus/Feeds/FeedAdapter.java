@@ -97,7 +97,9 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		// checks on checks
 		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type)
 			updateItems(position);
+		
 		converted.add(convertView);
+		values.get(0).isSearchMode();
 
 		return convertView;
 	}
@@ -427,4 +429,11 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 					.findViewById(R.id.action_done).performClick();
 		}
 	}
+
+	public void updateFeeds() {
+		for(int i = 0; i < values.size(); i++){
+			values.get(i).update();
+		}
+	}
+	
 }

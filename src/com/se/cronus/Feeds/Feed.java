@@ -8,6 +8,7 @@ import com.se.cronus.backend.ItemGenerator;
 import com.se.cronus.items.FeedItem;
 import com.se.cronus.utils.CUtils;
 import com.se.cronus.utils.CronusApp;
+
 import android.content.Context;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ public class Feed extends RelativeLayout {
 	public ImageView remove;
 	public TextView subtitle;
 	public ItemGenerator itemgen;
+	public ArrayList<Object> network;
 
 	public String getSubtitle() {
 		return subtitle.getText().toString();
@@ -209,8 +211,13 @@ public class Feed extends RelativeLayout {
 		return "Some thing weird happend, how did you break this app?";
 
 	}
-	public void addItem(FeedItem i){
-		
+	
+
+	public void update() {
+		// TODO Auto-generated method stub
+		Thread genthread = new Thread(itemgen);
+		itemgen.numItemsRequested(5);
+		genthread.run();
 	}
 
 }

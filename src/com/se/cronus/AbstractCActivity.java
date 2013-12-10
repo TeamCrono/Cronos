@@ -178,7 +178,7 @@ OnClickListener {
 		curAttatched.setFadeDegree(0.35f);
 		// curAttatched.attachToActivity(this, //attatched with onclick
 		// SlidingMenu.SLIDING_CONTENT);
-		if(v.getParent() == null)
+		if(v.getParent() != null)
 			((ViewGroup)v.getParent()).removeView(v);
 		curAttatched.setMenu(v);
 //		curAttatched

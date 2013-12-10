@@ -27,7 +27,12 @@ public class ItemGenerator implements Runnable{
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(int i = 0; i < numNeeded; i++)
 			genItem();
 		
@@ -38,7 +43,6 @@ public class ItemGenerator implements Runnable{
 		numNeeded = 1;
 	}
 	private FeedItem genItem() {
-		// TODO Auto-generated method stub
 		FeedItem gened = new FeedItem(thisF.getContext(), thisF.type, docgen.getNewDoc(thisF.type),
 				((CronusApp)((MainActivity)thisF.getContext()).getApplication()).feedIDgen++);
 		post(gened);
@@ -53,6 +57,7 @@ public class ItemGenerator implements Runnable{
 //				e.printStackTrace();
 //			}
 //		}
+		
 		thisF.feeditemlist.post(new Runnable(){
 
 			@Override

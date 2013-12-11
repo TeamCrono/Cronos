@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Pair;
 import android.view.View;
@@ -34,6 +37,9 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 	private LinearLayout titleBar;
 	private LinearLayout titleOverlay;
 	private LinearLayout infoLayout; //contains likes, author and description
+	private LinearLayout infoPics;	//contains likes heart and comment pics
+	private LinearLayout infoContainer; //contains the infoLayout and infoPics layouts
+	private LinearLayout buttonHolder;
 	private TextView author;
 	private TextView iAuthor;
 	private TextView description;
@@ -44,29 +50,36 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 	private ImageView profilePic;
 	public ImageView likeButton;
 	public ImageView commentButton;
+	
+	private Bitmap bImg;
 	private float ratio;
+	private int likes;
 	
 	public InstagramItemFragmentView(ItemDoc d, Context c) {
 		super(d, c);
 		pullContent();
+		setStyles();
 	}
 
 	@SuppressLint("NewApi")
 	private ItemDoc pullContent() {
-		
-		image.setBackground(doc.getImg());
-		ratio = doc.getImg().getIntrinsicWidth() / doc.getImg().getIntrinsicHeight();
+		Drawable img = doc.getImg();
+		ratio = img.getIntrinsicWidth() / img.getIntrinsicHeight();
+		bImg = CUtils.drawableToBitmap((MainActivity) this.getContext(), img, CUtils.getScreenWidth((MainActivity) this.getContext()), ratio);
+		img = new BitmapDrawable(getResources(), bImg);
+		likes = doc.getNumLikes();
+		image.setBackground(img);
 		profilePic.setBackground(doc.getProfPic());
-		author.setText(doc.getAuthor() + "test");
+		author.setText(doc.getAuthor());
 		iAuthor.setText(doc.getAuthor() + " ");
-		likesText.setText("#" + doc.getNumLikes() + "likes");
+		likesText.setText(likes + "likes");
 		description.setText(doc.getStatus());
 		for(Pair<String, String> cur : doc.getComments()) {
 			LinearLayout comment = new LinearLayout(this.getContext());
 			TextView cAuthor = new TextView(this.getContext());
 			cAuthor.setTextColor(Color.rgb(81, 127, 164));
 			cAuthor.setTypeface(null, Typeface.BOLD);
-			cAuthor.setText(cur.first);
+			cAuthor.setText(cur.first + " ");
 			TextView commentText = new TextView(this.getContext());
 			commentText.setTextColor(Color.rgb(140, 140, 140));
 			commentText.setText(cur.second);
@@ -83,7 +96,10 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		content = new LinearLayout(this.getContext());
 		titleBar = new LinearLayout(this.getContext());
 		titleOverlay = new LinearLayout(this.getContext());
+		infoContainer = new LinearLayout(this.getContext());
 		infoLayout = new LinearLayout(this.getContext());
+		infoPics = new LinearLayout(this.getContext());
+		buttonHolder = new LinearLayout(this.getContext());
 		author = new TextView(this.getContext());
 		iAuthor = new TextView(this.getContext());
 		description = new TextView(this.getContext());
@@ -95,6 +111,15 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		commentButton = new ImageView(this.getContext());
 		// TODO: create comment button, like button
 	}
+	
+	private void setStyles() {
+		titleBar.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
+		author.setTextColor(Color.rgb(81, 127, 164));
+		author.setTypeface(null, Typeface.BOLD);
+		iAuthor.setTextColor(Color.rgb(81, 127, 164));
+		iAuthor.setTypeface(null, Typeface.BOLD);
+		description.setTextColor(Color.rgb(140, 140, 140));
+	}
 
 	@Override
 	protected void setLayoutParams() {
@@ -103,7 +128,7 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		RelativeLayout.LayoutParams pTitle = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, CUtils.getActBarH(this.getContext()));//finish later TODO
 		pTitle.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		pTitle.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		titleBar.setOrientation(LinearLayout.VERTICAL);
+		titleBar.setOrientation(LinearLayout.HORIZONTAL);
 		titleBar.setLayoutParams(pTitle);
 		
 		//params for scrolling stuff
@@ -113,8 +138,8 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		mainScroll.setLayoutParams(pScroll);
 		
 		//add top level views
-		this.addView(titleBar);
 		this.addView(mainScroll);
+		this.addView(titleBar);
 		
 		content.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		content.setOrientation(LinearLayout.VERTICAL);
@@ -122,41 +147,59 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		
 		//titleBar stuff
 		profilePic.setLayoutParams(new LayoutParams(75, 75));//TODO, acutally crop this photo
-		author.setTextColor(Color.rgb(81, 127, 164));
-		author.setTypeface(null, Typeface.BOLD);
 		titleBar.addView(profilePic);
 		titleBar.addView(author);
 		
 		//Layout for prettiness
 		titleOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, CUtils.getActBarH(this.getContext())));
 		titleOverlay.setVisibility(View.INVISIBLE);
-		infoLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		infoLayout.setOrientation(LinearLayout.VERTICAL);
+		infoContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		infoContainer.setOrientation(LinearLayout.VERTICAL);
+		buttonHolder.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		buttonHolder.setOrientation(LinearLayout.HORIZONTAL);
 		content.addView(titleOverlay);
 		content.addView(image);
-		content.addView(infoLayout);
+		content.addView(infoContainer);
+		content.addView(buttonHolder);
+		
+		//Layout for infoContainer
+		infoLayout.setLayoutParams(new LayoutParams((int) (CUtils.getScreenWidth((MainActivity) this.getContext()) * .95), LayoutParams.WRAP_CONTENT));
+		infoLayout.setOrientation(LinearLayout.VERTICAL);
+		infoPics.setLayoutParams(new LayoutParams((int) (CUtils.getScreenWidth((MainActivity) this.getContext()) * .05), LayoutParams.WRAP_CONTENT));
+		infoPics.setOrientation(LinearLayout.VERTICAL);
+		infoContainer.addView(infoPics);
+		infoContainer.addView(infoLayout);
 		
 		//info layout
-		infoLayout.addView(likesText);
+		if (likes > 0)
+			infoLayout.addView(likesText);
 		likesText.setTextColor(Color.rgb(140, 140, 140));
 		LinearLayout descriptionAuthor = new LinearLayout(this.getContext());
 		descriptionAuthor.setOrientation(LinearLayout.HORIZONTAL);
 		descriptionAuthor.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT));
 		infoLayout.addView(descriptionAuthor);
-		iAuthor.setTextColor(Color.rgb(81, 127, 164));
-		iAuthor.setTypeface(null, Typeface.BOLD);
-		description.setTextColor(Color.rgb(140, 140, 140));
 		descriptionAuthor.addView(iAuthor);
 		descriptionAuthor.addView(description);
 		
+		//info pics
+//		if (likes > 0)
+//			infoPics.addView(likesHeart);
+//		infoPics.addView(commentsImg);
 		
 		//buttons :)
+		likeButton.setClickable(true);
+		likeButton.setOnClickListener(this.clicklistener);
+		commentButton.setClickable(true);
+		commentButton.setOnClickListener(this.clicklistener);
+		buttonHolder.addView(likeButton);
+		buttonHolder.addView(commentButton);
+		
 		
 	}
 
 	@Override
 	public void destroy() {
-		// TODO Maybe later
+		bImg.recycle();
 		
 	}
 

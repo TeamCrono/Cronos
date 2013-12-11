@@ -216,7 +216,7 @@ public class CUtils {
 
 	public static Bitmap drawableToBitmap(Activity main, Drawable drawable,
 			int W, float Ratio/* W/H */) {
-		int H = (int) (W / Ratio);
+		int H = (int) ((float)W / Ratio);
 		return drawableToBitmap(main, drawable, W, H);
 
 	}

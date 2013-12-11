@@ -214,21 +214,28 @@ public class CUtils {
 		return bitmap;
 	}
 
+	public static Bitmap drawableToBitmap(Activity main, Drawable drawable,
+			int W, float Ratio/* W/H */) {
+		int H = (int) (W / Ratio);
+		return drawableToBitmap(main, drawable, W, H);
+
+	}
+
 	public void scaleBitmap(Bitmap toScale) {
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inSampleSize = 4;
 
 	}
-	
-	public static int genCronusID(Context con){
-		CronusApp appthis = ((CronusApp)((MainActivity)con).getApplication());
+
+	public static int genCronusID(Context con) {
+		CronusApp appthis = ((CronusApp) ((MainActivity) con).getApplication());
 		appthis.feedIDgen++;
 		return appthis.feedIDgen;
-		
+
 	}
-	public static int getActBarH(Context con){
-		return ((MainActivity)con).getActionBar().getHeight();
+
+	public static int getActBarH(Context con) {
+		return ((MainActivity) con).getActionBar().getHeight();
 	}
-	
-	
+
 }

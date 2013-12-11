@@ -50,7 +50,11 @@ public class TwitterView extends ItemFragmentView {
 	private void setStyles() {
 		this.setBackgroundColor(CUtils.TWITTER_BLUE);
 		tweetLayout.setBackgroundColor(CUtils.TWITTER_BLUE);
-		replyButton.setBackgroundResource(R.drawable.tw);
+		replyButton.setBackgroundResource(R.drawable.twitter_reply);
+		retweetButton.setBackgroundResource(R.drawable.twitter_retweet);
+		favoriteButton.setBackgroundResource(R.drawable.twitter_fav_not);
+		//content.setBackgroundColor(CUtils.TWITTER_BLUE);
+		
 		//this.setBackgroundColor(Color.rgb(82, 82, 82)); //twitter dark grey
 		
 //		sharedImg = new ImageView(this.getContext());
@@ -77,6 +81,12 @@ public class TwitterView extends ItemFragmentView {
 		author.setText(doc.getAuthor());
 		author.setTypeface(null, Typeface.BOLD);
 		tweet.setText(doc.getStatus());
+		LinearLayout commentsLayout = new LinearLayout(this.getContext());
+		commentsLayout.setOrientation(LinearLayout.VERTICAL);
+		commentsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		commentsLayout.setBackgroundColor(CUtils.TWITTER_BLUE);
+		content.addView(commentsLayout);
+		
 		for(Pair<String, String> cur : doc.getComments())
 		{
 			LinearLayout tempComment = new LinearLayout(this.getContext());
@@ -87,13 +97,15 @@ public class TwitterView extends ItemFragmentView {
 			tempAuthor.setText(cur.first);
 			TextView tempText = new TextView(this.getContext());
 			tempText.setText(cur.second);
+			tempText.setBackgroundColor(Color.WHITE);
 			tempText.setPaddingRelative(10, 0, 0, 10);
 			tempComment.addView(tempAuthor);
 			tempComment.addView(tempText);
-			tempComment.setBackgroundColor(CUtils.TWITTER_BLUE);
-			content.addView(tempComment);
-			tempComment.setBackgroundColor(Color.WHITE);
-			tempComment.setPadding(15, 15, 15, 15);
+//			tempComment.setBackgroundColor(Color.WHITE);
+			tempAuthor.setBackgroundColor(Color.WHITE);
+			commentsLayout.addView(tempComment);
+//			tempComment.setBackgroundColor(Color.WHITE);
+			tempComment.setPadding(10, 10, 10, 10);
 		}
 		return this.getDoc();
 	}
@@ -161,18 +173,18 @@ public class TwitterView extends ItemFragmentView {
 		innerButtons.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
 //		profilePic.setLayoutParams(new LayoutParams(100, 100));
 		tweetLayout.addView(profilePic);
-		//tweetLayout.addView(new Button(this.getContext()));
 		tweetLayout.addView(tweetInner);
 		tweetInner.addView(author);
 		tweetInner.addView(tweet);
-		tweetInner.addView(new Button(this.getContext()));//innerButtons);
+		tweetInner.addView(innerButtons);
 		tweetLayout.setPadding(0, 0, 0, 5);
 		
 		//add buttons to tweetInner, innerButtons
 		innerButtons.addView(replyButton);
 		innerButtons.addView(retweetButton);
 		innerButtons.addView(favoriteButton);
-		innerButtons.setBackgroundColor(Color.BLACK);
+		
+		
 	}
 
 	@Override

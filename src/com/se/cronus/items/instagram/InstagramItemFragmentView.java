@@ -66,8 +66,8 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 	private ItemDoc pullContent() {
 		Drawable img = doc.getImg();
 		ratio = img.getIntrinsicWidth() / img.getIntrinsicHeight();
-		bImg = CUtils.drawableToBitmap((MainActivity) this.getContext(), img, CUtils.getScreenWidth((MainActivity) this.getContext()), ratio);
-		img = new BitmapDrawable(getResources(), bImg);
+//		bImg = CUtils.drawableToBitmap((MainActivity) this.getContext(), img, CUtils.getScreenWidth((MainActivity) this.getContext()), ratio);
+//		img = new BitmapDrawable(getResources(), bImg);
 		likesHeart.setBackgroundResource(R.drawable.insta_heart_img);
 		commentsImg.setBackgroundResource(R.drawable.insta_comment_img);
 		image.setBackground(img);

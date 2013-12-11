@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,8 +28,7 @@ import com.se.cronus.utils.CUtils;
  *
  */
 public class InstagramItemFragmentView extends ItemFragmentView{
-	
-	private ItemDoc doc;
+
 	private ScrollView mainScroll;
 	private LinearLayout content;
 	private LinearLayout titleBar;
@@ -40,9 +42,9 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 	private ImageView likesHeart;
 	private ImageView commentsImg;
 	private ImageView profilePic;
-	private ImageView iProfilePic;
 	public ImageView likeButton;
 	public ImageView commentButton;
+	private float ratio;
 	
 	public InstagramItemFragmentView(ItemDoc d, Context c) {
 		super(d, c);
@@ -51,19 +53,28 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 
 	@SuppressLint("NewApi")
 	private ItemDoc pullContent() {
+		
 		image.setBackground(doc.getImg());
+		ratio = doc.getImg().getIntrinsicWidth() / doc.getImg().getIntrinsicHeight();
 		profilePic.setBackground(doc.getProfPic());
-		iProfilePic.setBackground(doc.getProfPic());
-		author.setText(doc.getAuthor());
-		iAuthor.setText(doc.getAuthor());
+		author.setText(doc.getAuthor() + "test");
+		iAuthor.setText(doc.getAuthor() + " ");
 		likesText.setText("#" + doc.getNumLikes() + "likes");
 		description.setText(doc.getStatus());
+		for(Pair<String, String> cur : doc.getComments()) {
+			LinearLayout comment = new LinearLayout(this.getContext());
+			TextView cAuthor = new TextView(this.getContext());
+			cAuthor.setTextColor(Color.rgb(81, 127, 164));
+			cAuthor.setTypeface(null, Typeface.BOLD);
+			cAuthor.setText(cur.first);
+			TextView commentText = new TextView(this.getContext());
+			commentText.setTextColor(Color.rgb(140, 140, 140));
+			commentText.setText(cur.second);
+			comment.addView(cAuthor);
+			comment.addView(commentText);
+			content.addView(comment);
+		}
 		return this.getDoc();
-
-	public InstagramItemFragmentView(ItemDoc d, Context c) {
-		super(d, c);
-		setDoc(d);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -74,6 +85,7 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		titleOverlay = new LinearLayout(this.getContext());
 		infoLayout = new LinearLayout(this.getContext());
 		author = new TextView(this.getContext());
+		iAuthor = new TextView(this.getContext());
 		description = new TextView(this.getContext());
 		likesText = new TextView(this.getContext());
 		image = new ImageView(this.getContext());
@@ -109,7 +121,9 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		mainScroll.addView(content);
 		
 		//titleBar stuff
-		profilePic.setLayoutParams(new LayoutParams(100, 100));//TODO, acutally crop this photo
+		profilePic.setLayoutParams(new LayoutParams(75, 75));//TODO, acutally crop this photo
+		author.setTextColor(Color.rgb(81, 127, 164));
+		author.setTypeface(null, Typeface.BOLD);
 		titleBar.addView(profilePic);
 		titleBar.addView(author);
 		
@@ -124,28 +138,20 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		
 		//info layout
 		infoLayout.addView(likesText);
+		likesText.setTextColor(Color.rgb(140, 140, 140));
 		LinearLayout descriptionAuthor = new LinearLayout(this.getContext());
 		descriptionAuthor.setOrientation(LinearLayout.HORIZONTAL);
 		descriptionAuthor.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT));
 		infoLayout.addView(descriptionAuthor);
-//		iProfilePic.setLayoutParams(new LayoutParams(100, 100));//TODO, acutally crop this photo
-		descriptionAuthor.addView(iProfilePic);
+		iAuthor.setTextColor(Color.rgb(81, 127, 164));
+		iAuthor.setTypeface(null, Typeface.BOLD);
+		description.setTextColor(Color.rgb(140, 140, 140));
 		descriptionAuthor.addView(iAuthor);
 		descriptionAuthor.addView(description);
 		
+		
 		//buttons :)
 		
-	}
-
-	@Override
-	public boolean setDoc(ItemDoc d) {
-		doc = d;
-		return true;
-	}
-
-	@Override
-	public ItemDoc getDoc() {
-		return doc;
 	}
 
 	@Override

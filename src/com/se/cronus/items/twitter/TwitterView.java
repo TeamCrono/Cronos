@@ -3,10 +3,15 @@ package com.se.cronus.items.twitter;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Pair;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.se.cronus.MainActivity;
+import com.se.cronus.R;
 import com.se.cronus.items.ItemDoc;
 import com.se.cronus.items.ItemFragmentView;
 import com.se.cronus.utils.CUtils;
@@ -27,11 +33,12 @@ public class TwitterView extends ItemFragmentView {
 	private LinearLayout tweetLayout;
 	private TextView tweet;
 	private TextView author;
-	private ArrayList<LinearLayout> comments;
+	//private ArrayList<LinearLayout> comments;
 	private ImageView profilePic;
 	public ImageView replyButton;
 	public ImageView retweetButton;
 	public ImageView favoriteButton;
+	private Bitmap bimg;
 
 	public TwitterView(ItemDoc d, Context c) {
 		super(d, c);
@@ -42,12 +49,19 @@ public class TwitterView extends ItemFragmentView {
 
 	private void setStyles() {
 		this.setBackgroundColor(CUtils.TWITTER_BLUE);
+		tweetLayout.setBackgroundColor(CUtils.TWITTER_BLUE);
+		replyButton.setBackgroundResource(R.drawable.twitter_reply);
+		retweetButton.setBackgroundResource(R.drawable.twitter_retweet);
+		favoriteButton.setBackgroundResource(R.drawable.twitter_fav_not);
+		//content.setBackgroundColor(CUtils.TWITTER_BLUE);
+		
+		//this.setBackgroundColor(Color.rgb(82, 82, 82)); //twitter dark grey
 		
 //		sharedImg = new ImageView(this.getContext());
 //		contentScroll = new ScrollView(this.getContext());
 //		content.setBackgroundColor(Color.TRANSPARENT);
-		imageOverlay.setBackgroundColor(Color.CYAN);
-		tweetLayout.setBackgroundColor(Color.YELLOW);
+//		imageOverlay.setBackgroundColor(Color.CYAN);
+		//tweetLayout.setBackgroundColor(Color.WHITE);
 		
 //		author = new TextView(this.getContext());
 //		tweet = new TextView(this.getContext());
@@ -62,23 +76,37 @@ public class TwitterView extends ItemFragmentView {
 	@SuppressLint("NewApi")
 	public ItemDoc pullContent() {
 		sharedImg.setBackground(doc.getImg());
-		profilePic.setBackground(doc.getProfPic());
+		bimg = CUtils.drawableToBitmap((Activity)this.getContext(), doc.getProfPic(), 100, 100);
+		profilePic.setBackground(new BitmapDrawable(this.getResources(),bimg));
 		author.setText(doc.getAuthor());
+		author.setTypeface(null, Typeface.BOLD);
 		tweet.setText(doc.getStatus());
+		LinearLayout commentsLayout = new LinearLayout(this.getContext());
+		commentsLayout.setOrientation(LinearLayout.VERTICAL);
+		commentsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		commentsLayout.setBackgroundColor(CUtils.TWITTER_BLUE);
+		content.addView(commentsLayout);
+		
 		for(Pair<String, String> cur : doc.getComments())
 		{
 			LinearLayout tempComment = new LinearLayout(this.getContext());
+			tempComment.setOrientation(LinearLayout.VERTICAL);
+			tempComment.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 			TextView tempAuthor = new TextView(this.getContext());
+			tempAuthor.setTypeface(null, Typeface.BOLD);
 			tempAuthor.setText(cur.first);
 			TextView tempText = new TextView(this.getContext());
 			tempText.setText(cur.second);
+			tempText.setBackgroundColor(Color.WHITE);
+			tempText.setPaddingRelative(10, 0, 0, 10);
 			tempComment.addView(tempAuthor);
 			tempComment.addView(tempText);
-			content.addView(tempComment);
+//			tempComment.setBackgroundColor(Color.WHITE);
+			tempAuthor.setBackgroundColor(Color.WHITE);
+			commentsLayout.addView(tempComment);
+//			tempComment.setBackgroundColor(Color.WHITE);
+			tempComment.setPadding(10, 10, 10, 10);
 		}
-		
-		
-		
 		return this.getDoc();
 	}
 
@@ -98,11 +126,12 @@ public class TwitterView extends ItemFragmentView {
 		tweetLayout = new LinearLayout(this.getContext());
 		author = new TextView(this.getContext());
 		tweet = new TextView(this.getContext());
-		comments = new ArrayList<LinearLayout>();
+		//comments = new ArrayList<LinearLayout>();
 		profilePic = new ImageView(this.getContext());
 		replyButton = new ImageView(this.getContext());
 		retweetButton = new ImageView(this.getContext());
 		favoriteButton = new ImageView(this.getContext());
+		author = new TextView(this.getContext());
 	}
 
 	@Override
@@ -128,7 +157,7 @@ public class TwitterView extends ItemFragmentView {
 		contentScroll.addView(content);
 		
 		//now dealing with content
-		imageOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,CUtils.getScreenHeight((MainActivity) this.getContext())/2));
+		imageOverlay.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, CUtils.getScreenHeight((MainActivity) this.getContext())/2));
 		imageOverlay.setVisibility(View.INVISIBLE);
 		tweetLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		tweetLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -138,26 +167,29 @@ public class TwitterView extends ItemFragmentView {
 		//tweetLayout stuff
 		LinearLayout tweetInner = new LinearLayout(this.getContext());
 		tweetInner.setOrientation(LinearLayout.VERTICAL);
-		tweetInner.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT));
+		tweetInner.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT));
 		LinearLayout innerButtons = new LinearLayout(this.getContext());
 		innerButtons.setOrientation(LinearLayout.HORIZONTAL);
-		profilePic.setLayoutParams(new LayoutParams(100, 100));//TODO, acutally crop this photo
+		innerButtons.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+//		profilePic.setLayoutParams(new LayoutParams(100, 100));
 		tweetLayout.addView(profilePic);
 		tweetLayout.addView(tweetInner);
 		tweetInner.addView(author);
 		tweetInner.addView(tweet);
 		tweetInner.addView(innerButtons);
+		tweetLayout.setPadding(0, 0, 0, 5);
 		
-		//add buttons to tweetInner
+		//add buttons to tweetInner, innerButtons
 		innerButtons.addView(replyButton);
 		innerButtons.addView(retweetButton);
 		innerButtons.addView(favoriteButton);
+		
 		
 	}
 
 	@Override
 	public void destroy() {
-		
+		bimg.recycle();
 	}
 
 }

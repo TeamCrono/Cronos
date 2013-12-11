@@ -50,14 +50,14 @@ public class CUtils {
 	public static final int TWITTER_BLUE = Color.rgb(91, 197, 237);
 	public static final int TWITTER_BLUE_CLEAR = Color
 			.argb(CLEAR, 91, 197, 237);
+	public static final int TWITTER_GREY_DARK = Color.rgb(82, 82, 82);
 
 	/* cronus colors!! */
 	public static final int CRONUS_GREEN_LIGHT = Color.rgb(47, 255, 152);
 	public static final int CRONUS_GREEN_DARK = Color.rgb(0, 204, 153);
 	public static final int CRONUS_GREEN_BLACK = Color.rgb(7, 38, 23);
 	public static final int CRONUS_BLUE_WHITE = Color.rgb(227, 251, 255);
-	public static final int CRONUS_GREEN_LIGHT_CLEAR = Color.argb(CLEAR, 47,
-			255, 152);
+	public static final int CRONUS_GREEN_LIGHT_CLEAR = Color.argb(CLEAR, 47, 255, 152);
 
 	/* FONTS AND LETTERING AND NUMBER STUFF */
 	public static final float FONT_SIZE_SMALL = 18;

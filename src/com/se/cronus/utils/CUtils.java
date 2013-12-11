@@ -48,6 +48,8 @@ public class CUtils {
 	public static final int INSTA_BROWN = Color.rgb(75, 66, 57);
 	public static final int INSTA_BROWN_CLEAR = Color.argb(CLEAR, 75, 66, 57);
 	public static final int TWITTER_BLUE = Color.rgb(91, 197, 237);
+	public static final int TWITTER_BLUE_LIGHT = Color.rgb(121, 202, 252);
+	public static final int TWITTER_BLUE_LIGHT_CLEAR = Color.argb(CLEAR,121, 202, 252);;
 	public static final int TWITTER_BLUE_CLEAR = Color
 			.argb(CLEAR, 91, 197, 237);
 	public static final int TWITTER_GREY_DARK = Color.rgb(82, 82, 82);
@@ -61,6 +63,10 @@ public class CUtils {
 
 	/* FONTS AND LETTERING AND NUMBER STUFF */
 	public static final float FONT_SIZE_SMALL = 18;
+	public static final float FONT_SIZE_LARGE = FONT_SIZE_SMALL * 2;
+	public static final float FONT_SIZE_MED = (int)((double)FONT_SIZE_SMALL * 1.5);
+	public static final int CRONUS_BLUE_DARK = Color.rgb(62, 83, 93);
+	
 
 	/*
 	 * static methods
@@ -197,7 +203,7 @@ public class CUtils {
 				return nbitmap;
 			}
 			if (h > w) {// crop top and bottom
-				crop = (int) (w - h) / 2;
+				crop = (int) (h - w) / 2;
 				nbitmap = Bitmap.createBitmap(bitmap, 0, crop, w, h - crop);
 				nbitmap = Bitmap.createScaledBitmap(nbitmap, W, H, false);
 				if (!nbitmap.equals(bitmap)) {

@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
@@ -32,6 +33,7 @@ import android.view.View.OnKeyListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -225,7 +227,7 @@ OnClickListener {
 		profile.setBehindScrollScale(0.25f);
 		profile.setFadeDegree(0.35f);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		profile.setBackgroundColor(Color.RED);// CUtils.CRONUS_BLUE_WHITE);
+		profile.setBackgroundColor(CUtils.CRONUS_BLUE_DARK);
 		profile.setOnOpenedListener(new OnOpenedListener() {
 
 			@Override
@@ -243,20 +245,32 @@ OnClickListener {
 
 		});
 
-		profile.findViewById(com.se.cronus.R.id.testtestclick).setOnClickListener(
-				new OnClickListener() {
-
-					@Override
-					public void onClick(View v) {
-						// TODO Auto-generated method stub
-						//profileShowTest();
-					}
-
-				});
+		
+		/*DESIGN SECTION*/
+		((TextView)profile.getMenu().findViewById(com.se.cronus.R.id.profile_text1)).setTextColor(Color.WHITE);
+		((TextView)profile.getMenu().findViewById(com.se.cronus.R.id.profile_text1)).setTypeface(null, Typeface.BOLD);
+		((TextView)profile.getMenu().findViewById(com.se.cronus.R.id.profile_text1)).setTextSize(CUtils.FONT_SIZE_LARGE);
+		((TextView)profile.getMenu().findViewById(com.se.cronus.R.id.profile_text1)).setTextSize(CUtils.FONT_SIZE_MED);
+		((TextView)profile.getMenu().findViewById(com.se.cronus.R.id.profile_text2)).setTextColor(Color.WHITE);
+		
+		
+		//setOnClicks 
 		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_facebook).setOnClickListener(this);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_facebook)).setTextColor(Color.WHITE);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_facebook)).setTypeface(null, Typeface.BOLD);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_facebook)).setBackgroundColor(Color.TRANSPARENT);
 		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_twitter).setOnClickListener(this);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_twitter)).setTextColor(Color.WHITE);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_twitter)).setTypeface(null, Typeface.BOLD);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_twitter)).setBackgroundColor(Color.TRANSPARENT);
 		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_pintrest).setOnClickListener(this);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_pintrest)).setTextColor(Color.WHITE);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_pintrest)).setTypeface(null, Typeface.BOLD);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_pintrest)).setBackgroundColor(Color.TRANSPARENT);
 		profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_insta).setOnClickListener(this);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_insta)).setTextColor(Color.WHITE);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_insta)).setTypeface(null, Typeface.BOLD);
+		((Button) profile.getMenu().findViewById(com.se.cronus.R.id.test_profile_add_insta)).setBackgroundColor(Color.TRANSPARENT);
 		
 	}
 

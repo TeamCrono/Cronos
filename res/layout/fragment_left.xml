@@ -8,17 +8,25 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".SideLeftFragment" >
 
-    <TextView
-        android:id="@+id/testtestclick"
+        <TextView
+        android:id="@+id/profile_text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="Welcome to Cronus!,"
+         />
+
+    <TextView
+        android:id="@+id/profile_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_text1"
+        android:text="Feel Free to sign into, or even start a new social media and add it to your Cronus profile." />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/testtestclick"
+        android:layout_alignParentBottom="true"
         android:orientation="vertical" >
 
         <Button

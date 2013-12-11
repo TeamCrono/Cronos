@@ -229,8 +229,8 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 
 	@Override
 	public void destroy() {
-		bImg.recycle();
-		
+//		bImg.recycle();
+//		
 	}
 
 }

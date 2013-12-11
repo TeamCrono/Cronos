@@ -193,11 +193,23 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int pinterest_logo=0x7f020032;
         public static final int temp_cronos_logo=0x7f020033;
         public static final int temp_cronos_logo_new=0x7f020034;
-        public static final int twitter_fav=0x7f020035;
-        public static final int twitter_fav_not=0x7f020036;
-        public static final int twitter_logo=0x7f020037;
-        public static final int twitter_reply=0x7f020038;
-        public static final int twitter_retweet=0x7f020039;
+        public static final int test_pick_1=0x7f020035;
+        public static final int test_pick_10=0x7f020036;
+        public static final int test_pick_11=0x7f020037;
+        public static final int test_pick_12=0x7f020038;
+        public static final int test_pick_2=0x7f020039;
+        public static final int test_pick_3=0x7f02003a;
+        public static final int test_pick_4=0x7f02003b;
+        public static final int test_pick_5=0x7f02003c;
+        public static final int test_pick_6=0x7f02003d;
+        public static final int test_pick_7=0x7f02003e;
+        public static final int test_pick_8=0x7f02003f;
+        public static final int test_pick_9=0x7f020040;
+        public static final int twitter_fav=0x7f020041;
+        public static final int twitter_fav_not=0x7f020042;
+        public static final int twitter_logo=0x7f020043;
+        public static final int twitter_reply=0x7f020044;
+        public static final int twitter_retweet=0x7f020045;
     }
     public static final class id {
         public static final int action_done=0x7f050009;
@@ -206,11 +218,11 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int action_search_b=0x7f050007;
         public static final int action_search_et=0x7f05000b;
         public static final int action_search_tv=0x7f05000c;
-        public static final int action_settings=0x7f050024;
+        public static final int action_settings=0x7f050025;
         public static final int acton_bar=0x7f050005;
         public static final int button1=0x7f05000f;
-        public static final int button2=0x7f050021;
-        public static final int facebook_bt_killpeople=0x7f050022;
+        public static final int button2=0x7f050022;
+        public static final int facebook_bt_killpeople=0x7f050023;
         public static final int feed_body=0x7f050015;
         public static final int feed_full=0x7f050013;
         public static final int feed_head=0x7f050010;
@@ -228,15 +240,16 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int fullscreen=0x7f050003;
         public static final int left=0x7f050000;
         public static final int margin=0x7f050002;
+        public static final int profile_text1=0x7f05001c;
+        public static final int profile_text2=0x7f05001d;
         public static final int right=0x7f050001;
         public static final int selected_view=0x7f050004;
-        public static final int slidingmenumain=0x7f050023;
+        public static final int slidingmenumain=0x7f050024;
         public static final int temp_cronos_logo=0x7f050006;
-        public static final int test_profile_add_facebook=0x7f05001d;
-        public static final int test_profile_add_insta=0x7f050020;
-        public static final int test_profile_add_pintrest=0x7f05001f;
-        public static final int test_profile_add_twitter=0x7f05001e;
-        public static final int testtestclick=0x7f05001c;
+        public static final int test_profile_add_facebook=0x7f05001e;
+        public static final int test_profile_add_insta=0x7f050021;
+        public static final int test_profile_add_pintrest=0x7f050020;
+        public static final int test_profile_add_twitter=0x7f05001f;
     }
     public static final class integer {
         public static final int num_cols=0x7f070000;

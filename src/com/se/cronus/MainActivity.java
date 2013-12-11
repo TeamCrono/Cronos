@@ -106,7 +106,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		setUpListAdapter();
 		parent = (LinearLayout) findViewById(R.id.fragment_container);
 
-		this.parent.setBackgroundColor(Color.rgb(62, 83, 93));
+		this.parent.setBackgroundColor(CUtils.CRONUS_BLUE_DARK);
 
 		/* THIS SECTION IS FOR INIT AND DESIGN STUFF */
 	}
@@ -161,6 +161,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 
 	public void updateAllFeeds() {
 			feedAdapt.updateFeeds();
+			feedAdapt.resetItems();
 		
 	}
 

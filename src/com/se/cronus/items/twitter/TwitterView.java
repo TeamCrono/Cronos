@@ -49,10 +49,11 @@ public class TwitterView extends ItemFragmentView {
 
 	private void setStyles() {
 		this.setBackgroundColor(CUtils.TWITTER_BLUE);
-		tweetLayout.setBackgroundColor(CUtils.TWITTER_BLUE);
+		tweetLayout.setBackgroundColor(CUtils.TWITTER_BLUE_LIGHT_CLEAR);
 		replyButton.setBackgroundResource(R.drawable.twitter_reply);
 		retweetButton.setBackgroundResource(R.drawable.twitter_retweet);
 		favoriteButton.setBackgroundResource(R.drawable.twitter_fav_not);
+		
 		//content.setBackgroundColor(CUtils.TWITTER_BLUE);
 		
 		//this.setBackgroundColor(Color.rgb(82, 82, 82)); //twitter dark grey
@@ -84,7 +85,7 @@ public class TwitterView extends ItemFragmentView {
 		LinearLayout commentsLayout = new LinearLayout(this.getContext());
 		commentsLayout.setOrientation(LinearLayout.VERTICAL);
 		commentsLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-		commentsLayout.setBackgroundColor(CUtils.TWITTER_BLUE);
+		commentsLayout.setBackgroundColor(CUtils.TWITTER_BLUE_LIGHT);
 		content.addView(commentsLayout);
 		
 		for(Pair<String, String> cur : doc.getComments())
@@ -189,7 +190,7 @@ public class TwitterView extends ItemFragmentView {
 
 	@Override
 	public void destroy() {
-		bimg.recycle();
+//		bimg.recycle();
 	}
 
 }

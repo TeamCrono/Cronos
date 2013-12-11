@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /***
  * 
@@ -95,11 +96,11 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		setOnClicks(position);
 		f.setUpView();
 		// checks on checks
-		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type)
-			updateItems(position);
+//		if (f.items.size() > 0 && !f.isInit && f.type == f.items.get(0).type)
+//		updateItems(position);
 		
 		converted.add(convertView);
-		values.get(0).isSearchMode();
+//		values.get(0).isSearchMode();
 
 		return convertView;
 	}
@@ -130,7 +131,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			}
 		else
 			for (int i = 0; i < values.size(); i++) {
-				values.get(i).feeditemlist.removeAllViews();
+//				values.get(i).feeditemlist.removeAllViews();
 				updateItems(i);
 			}
 	}
@@ -362,7 +363,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 		// lots of checks to avoid random acurences trust me all needed.
 		int i = 0;
 		// first remove everything
-		fixNulls(p);
+//		fixNulls(p);
 		values.get(p).feeditemlist.removeAllViews();
 
 		ArrayList<FeedItem> toadd = null;
@@ -377,6 +378,7 @@ public class FeedAdapter extends ArrayAdapter<Feed> {
 			if (parent != null)
 				parent.removeView(toadd.get(i));
 			values.get(p).feeditemlist.addView(toadd.get(i));
+			
 		}
 
 	}

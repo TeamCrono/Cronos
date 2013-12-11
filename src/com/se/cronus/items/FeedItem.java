@@ -177,6 +177,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 		tv.setText(tvstr);
 		tv.setMaxLines(3);
 		tv.setTextSize(CUtils.FONT_SIZE_SMALL);
+		tv.setTextColor(Color.WHITE);
 
 		// set fonts and colors
 

@@ -152,7 +152,7 @@ public class FeedItem extends RelativeLayout implements OnClickListener {
 				bgpic, W, H);
 
 		bgpic = new BitmapDrawable(getResources(), d);
-
+//		d.recycle();
 		bg.setBackground(bgpic);
 		// never ever forget this line
 		// d.recycle(); TODO :put this line in were ever we remove items

@@ -69,7 +69,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	public static final boolean TESTING = true;
 
 	/* general stuff */
-	FrameLayout parent;
+	LinearLayout parent;
 	boolean ifTrue;
 	ListView FeedList;
 	public FeedAdapter feedAdapt;
@@ -104,7 +104,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		}
 
 		setUpListAdapter();
-		parent = (FrameLayout) findViewById(R.id.fragment_container);
+		parent = (LinearLayout) findViewById(R.id.fragment_container);
 
 		this.parent.setBackgroundColor(Color.rgb(62, 83, 93));
 
@@ -135,22 +135,23 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 				final int lastItem = firstVisibleItem + visibleItemCount;
 				if (lastItem == totalItemCount) {
 					// you have reached end of list, load more data
-//					updateAllFeeds();
+					// updateAllFeeds();
 				}
 				if (firstVisibleItem == 0) {
 					// you have reached beginning of list, load more data
-//					updateAllFeeds();
+					// updateAllFeeds();
 				}
 			}
 
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				// blank, not using this
-				if(this.SCROLL_STATE_TOUCH_SCROLL == scrollState){
-//					Feed topViewFeed = null; //TODO: make a feed that is just a spinner
-//					feedAdapt.add(topViewFeed);//find a way to remove it
-					//view.getChildAt(0);
-					
+				if (this.SCROLL_STATE_TOUCH_SCROLL == scrollState) {
+					// Feed topViewFeed = null; //TODO: make a feed that is just
+					// a spinner
+					// feedAdapt.add(topViewFeed);//find a way to remove it
+					// view.getChildAt(0);
+
 					return;
 				}
 			}
@@ -159,15 +160,17 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	}
 
 	public void updateAllFeeds() {
-		System.out.println("updateAllFeeds");
-		for(int i = 0; i < feedAdapt.getCount(); i++){
-			Thread genthread = new Thread(feedAdapt.getItem(i).itemgen);
-			feedAdapt.getItem(i).itemgen.numItemsRequested(5);
-			genthread.run();
-		}
+			feedAdapt.updateFeeds();
+		
 	}
 
-	
+	public void updateFeed(int type) {
+		for (int i = 0; i < feedAdapt.getCount(); i++) {
+			if (feedAdapt.getItem(i).type == type) {
+				feedAdapt.getItem(i).update();
+			}
+		}
+	}
 
 	private void setFeedArray() {
 		// TODO create A feed list consisting of all of users current feeds;
@@ -210,7 +213,7 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	}
 
 	protected void onSearchClick() {
-		if(feedAdapt.getCount() == 0)
+		if (feedAdapt.getCount() == 0)
 			return;
 		// enable search
 		if (searchTextE.getVisibility() == View.GONE && !searchB) {
@@ -276,7 +279,10 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		System.out.println("onOpenItem");
 		item.setBackgroundResource(com.se.cronus.R.drawable.navigation_previous_item);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		profile.setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
 
+		curAttatched.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		curAttatched.setTouchModeBehind(SlidingMenu.TOUCHMODE_MARGIN);
 		CUR = RIGHT;
 	}
 
@@ -284,7 +290,10 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 	protected void onOpenProfile() {
 		System.out.println("onOpenProfile");
 		curAttatched.setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+		curAttatched.setTouchModeBehind(SlidingMenu.TOUCHMODE_NONE);
 
+		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		profile.setTouchModeBehind(SlidingMenu.TOUCHMODE_MARGIN);
 		CUR = LEFT;
 	}
 
@@ -293,7 +302,10 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		System.out.println("onOpenMain");
 		item.setBackgroundResource(com.se.cronus.R.drawable.navigation_next_item);
 		profile.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		profile.setTouchModeBehind(SlidingMenu.TOUCHMODE_MARGIN);
+
 		curAttatched.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		curAttatched.setTouchModeBehind(SlidingMenu.TOUCHMODE_MARGIN);
 		CUR = MAIN;
 	}
 
@@ -309,7 +321,6 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 		case R.id.test_profile_add_facebook:
 			newf = new Feed(this, CUtils.FACEBOOK_FEED);
 			feedAdapt.add(newf);
-			
 
 			break;
 		case R.id.test_profile_add_twitter:
@@ -326,13 +337,14 @@ public class MainActivity extends /* Sliding */AbstractCActivity {
 			break;
 		}
 		this.viewMain();
-//		this.updateAllFeeds();  //need to do this somewhre 
+		// this.updateAllFeeds(); //need to do this somewhre
 	}
+
 	@Override
-	public void onBackPressed(){		
-		if (searchTextE.getVisibility() == View.VISIBLE && searchB){
+	public void onBackPressed() {
+		if (searchTextE.getVisibility() == View.VISIBLE && searchB) {
 			this.onSearchClick();
-		}else
+		} else
 			super.onBackPressed();
 	}
 

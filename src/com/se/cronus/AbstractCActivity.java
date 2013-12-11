@@ -143,17 +143,17 @@ OnClickListener {
 		super.onSaveInstanceState(outState);
 	}
 
-	@Override
-	public boolean onMenuOpened(int featureId, Menu menu) {
-		// TODO Auto-generated method stub
-		if (menu.equals(profile)
-				|| ((SlidingMenu) menu).getId() == profile.getId()) {
-			System.out.print("PROFILE OPENED");
-
-		}
-
-		return super.onMenuOpened(featureId, menu);
-	}
+//	@Override
+//	public boolean onMenuOpened(int featureId, Menu menu) {
+//		// TODO Auto-generated method stub
+//		if (menu.equals(profile)
+//				|| ((SlidingMenu) menu).getId() == profile.getId()) {
+//			System.out.print("PROFILE OPENED");
+//
+//		}
+//
+//		return super.onMenuOpened(featureId, menu);
+//	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
@@ -178,7 +178,7 @@ OnClickListener {
 		curAttatched.setFadeDegree(0.35f);
 		// curAttatched.attachToActivity(this, //attatched with onclick
 		// SlidingMenu.SLIDING_CONTENT);
-		if(v.getParent() == null)
+		if(v.getParent() != null)
 			((ViewGroup)v.getParent()).removeView(v);
 		curAttatched.setMenu(v);
 //		curAttatched
@@ -398,7 +398,7 @@ OnClickListener {
 		// go Right
 
 		curAttatched.showMenu(true);
-		if (!curAttatched.isMenuShowing()) {
+		if (CUR != RIGHT) {
 			System.out.println("Item didn't show, trying again");
 		}
 
@@ -406,11 +406,11 @@ OnClickListener {
 
 	protected void viewMain() {
 		// goleft
-		if (curAttatched.isMenuShowing()) {
+		if (CUR == RIGHT) {
 			item.setBackgroundResource(com.se.cronus.R.drawable.navigation_next_item);
 			curAttatched.showContent(true);
 		}
-		if (profile.isMenuShowing()) {
+		if (CUR == LEFT) {
 			profile.showContent(true);
 		}
 

@@ -46,7 +46,7 @@ public class DocGen {
 		ItemDoc newDoc = new ItemDoc();
 		newDoc.setAuthor(testNAME());
 		for(int i = 0; i < 10; i++)
-			comments.add(new Pair<String,String>("Liz Test",testComment()));
+			comments.add(new Pair<String,String>(testNAME(),testComment()));
 		newDoc.setComments(comments);
 		
 		newDoc.setImg(testPicGen());

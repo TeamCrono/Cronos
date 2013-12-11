@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.RelativeLayout.LayoutParams;
 
 import com.se.cronus.MainActivity;
+import com.se.cronus.R;
 import com.se.cronus.items.ItemDoc;
 import com.se.cronus.items.ItemFragmentView;
 import com.se.cronus.utils.CUtils;
@@ -36,8 +37,9 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 	private LinearLayout content;
 	private LinearLayout titleBar;
 	private LinearLayout titleOverlay;
-	private LinearLayout infoLayout; //contains likes, author and description
-	private LinearLayout infoPics;	//contains likes heart and comment pics
+	private LinearLayout infoLayout; //contains author and description and comments and commentsImg
+	private LinearLayout infoText;
+	private LinearLayout infoLike;	//contains likes heart and #likes
 	private LinearLayout infoContainer; //contains the infoLayout and infoPics layouts
 	private LinearLayout buttonHolder;
 	private TextView author;
@@ -53,7 +55,6 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 	
 	private Bitmap bImg;
 	private float ratio;
-	private int likes;
 	
 	public InstagramItemFragmentView(ItemDoc d, Context c) {
 		super(d, c);
@@ -67,12 +68,13 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		ratio = img.getIntrinsicWidth() / img.getIntrinsicHeight();
 		bImg = CUtils.drawableToBitmap((MainActivity) this.getContext(), img, CUtils.getScreenWidth((MainActivity) this.getContext()), ratio);
 		img = new BitmapDrawable(getResources(), bImg);
-		likes = doc.getNumLikes();
+		likesHeart.setBackgroundResource(R.drawable.insta_heart_img);
+		commentsImg.setBackgroundResource(R.drawable.insta_comment_img);
 		image.setBackground(img);
 		profilePic.setBackground(doc.getProfPic());
 		author.setText(doc.getAuthor());
 		iAuthor.setText(doc.getAuthor() + " ");
-		likesText.setText(likes + "likes");
+		likesText.setText(doc.getNumLikes() + "likes");
 		description.setText(doc.getStatus());
 		for(Pair<String, String> cur : doc.getComments()) {
 			LinearLayout comment = new LinearLayout(this.getContext());
@@ -85,8 +87,10 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 			commentText.setText(cur.second);
 			comment.addView(cAuthor);
 			comment.addView(commentText);
-			content.addView(comment);
+			infoText.addView(comment);
 		}
+		content.addView(buttonHolder);
+		
 		return this.getDoc();
 	}
 
@@ -97,8 +101,9 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		titleBar = new LinearLayout(this.getContext());
 		titleOverlay = new LinearLayout(this.getContext());
 		infoContainer = new LinearLayout(this.getContext());
+		infoText = new LinearLayout(this.getContext());
 		infoLayout = new LinearLayout(this.getContext());
-		infoPics = new LinearLayout(this.getContext());
+		infoLike = new LinearLayout(this.getContext());
 		buttonHolder = new LinearLayout(this.getContext());
 		author = new TextView(this.getContext());
 		iAuthor = new TextView(this.getContext());
@@ -106,19 +111,30 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		likesText = new TextView(this.getContext());
 		image = new ImageView(this.getContext());
 		likesHeart = new ImageView(this.getContext());
+		commentsImg = new ImageView(this.getContext());
 		profilePic = new ImageView(this.getContext());
 		likeButton = new ImageView(this.getContext());
 		commentButton = new ImageView(this.getContext());
 		// TODO: create comment button, like button
 	}
 	
+	@SuppressLint("NewApi")
 	private void setStyles() {
+		this.setBackgroundColor(Color.WHITE);
 		titleBar.setBackgroundColor(CUtils.INSTA_BROWN_CLEAR);
 		author.setTextColor(Color.rgb(81, 127, 164));
 		author.setTypeface(null, Typeface.BOLD);
+		likesText.setTextColor(Color.rgb(140, 140, 140));
 		iAuthor.setTextColor(Color.rgb(81, 127, 164));
 		iAuthor.setTypeface(null, Typeface.BOLD);
 		description.setTextColor(Color.rgb(140, 140, 140));
+		likeButton.setBackgroundResource(R.drawable.insta_heart_img);
+		commentButton.setBackgroundResource(R.drawable.insta_comment_img);
+		infoLayout.setPadding(10, 0, 0, 0);
+		likeButton.setPadding(10, 3, 0, 3);
+		commentButton.setPadding(10, 3, 0, 3);
+		commentsImg.setPadding(0, 10, 0, 0);
+		
 	}
 
 	@Override
@@ -155,44 +171,58 @@ public class InstagramItemFragmentView extends ItemFragmentView{
 		titleOverlay.setVisibility(View.INVISIBLE);
 		infoContainer.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		infoContainer.setOrientation(LinearLayout.VERTICAL);
-		buttonHolder.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		RelativeLayout.LayoutParams pbuttonHolder = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		pbuttonHolder.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		buttonHolder.setLayoutParams(pbuttonHolder);
 		buttonHolder.setOrientation(LinearLayout.HORIZONTAL);
 		content.addView(titleOverlay);
 		content.addView(image);
 		content.addView(infoContainer);
-		content.addView(buttonHolder);
 		
 		//Layout for infoContainer
-		infoLayout.setLayoutParams(new LayoutParams((int) (CUtils.getScreenWidth((MainActivity) this.getContext()) * .95), LayoutParams.WRAP_CONTENT));
-		infoLayout.setOrientation(LinearLayout.VERTICAL);
-		infoPics.setLayoutParams(new LayoutParams((int) (CUtils.getScreenWidth((MainActivity) this.getContext()) * .05), LayoutParams.WRAP_CONTENT));
-		infoPics.setOrientation(LinearLayout.VERTICAL);
-		infoContainer.addView(infoPics);
+		infoLayout.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		infoLayout.setOrientation(LinearLayout.HORIZONTAL);
+		infoLike.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		infoLike.setOrientation(LinearLayout.HORIZONTAL);
+		infoText.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		infoText.setOrientation(LinearLayout.VERTICAL);
+		infoContainer.addView(infoLike);
 		infoContainer.addView(infoLayout);
 		
 		//info layout
-		if (likes > 0)
-			infoLayout.addView(likesText);
-		likesText.setTextColor(Color.rgb(140, 140, 140));
+		if (doc.getNumLikes() > 0) {
+			infoLike.addView(likesHeart);
+			infoLike.addView(likesText);
+		}
 		LinearLayout descriptionAuthor = new LinearLayout(this.getContext());
 		descriptionAuthor.setOrientation(LinearLayout.HORIZONTAL);
-		descriptionAuthor.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.MATCH_PARENT));
-		infoLayout.addView(descriptionAuthor);
+		descriptionAuthor.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+		infoLayout.addView(commentsImg);
+		infoLayout.addView(infoText);
+		infoText.addView(descriptionAuthor);
 		descriptionAuthor.addView(iAuthor);
 		descriptionAuthor.addView(description);
-		
-		//info pics
-//		if (likes > 0)
-//			infoPics.addView(likesHeart);
-//		infoPics.addView(commentsImg);
 		
 		//buttons :)
 		likeButton.setClickable(true);
 		likeButton.setOnClickListener(this.clicklistener);
+		likeButton.setLayoutParams(new LayoutParams(CUtils.getActBarH(this.getContext()), CUtils.getActBarH(this.getContext())));
 		commentButton.setClickable(true);
 		commentButton.setOnClickListener(this.clicklistener);
+		commentButton.setLayoutParams(new LayoutParams(CUtils.getActBarH(this.getContext()), CUtils.getActBarH(this.getContext())));
+		LinearLayout tempLeftPad = new LinearLayout(this.getContext());
+		RelativeLayout.LayoutParams pTempPad = new RelativeLayout.LayoutParams(50, LayoutParams.MATCH_PARENT + 10);
+		tempLeftPad.setLayoutParams(pTempPad);
+		LinearLayout tempPad = new LinearLayout(this.getContext());
+		tempPad.setLayoutParams(pTempPad);
+		buttonHolder.addView(tempLeftPad);
 		buttonHolder.addView(likeButton);
+		buttonHolder.addView(tempPad);
 		buttonHolder.addView(commentButton);
+//		RelativeLayout.LayoutParams pbuttonHolder = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+//		pbuttonHolder.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//		buttonHolder.setLayoutParams(pbuttonHolder);
+//		this.addView(buttonHolder);
 		
 		
 	}
